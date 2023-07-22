@@ -1,12 +1,13 @@
-import Container from "@/components/Container";
-import SignInForm from "@/components/SignInForm";
 import Image from "next/image";
+
+import SignInForm from "../components/SignInForm";
+import Container from "@/components/Container";
 
 const SignInPage = () => {
   return (
     <div className="bg-maroon md:bg-white">
       <Container>
-        <div className="grid grid-cols-12 w-full h-full min-h-screen">
+        <div className="grid grid-cols-12 w-full h-full min-h-screen overflow-y-auto">
           <div className="col-span-full md:col-span-8 flex justify-center items-center p-4">
             <SignInForm />
           </div>

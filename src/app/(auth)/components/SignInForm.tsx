@@ -12,13 +12,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+} from "../../../components/ui/form";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import AuthSocialButton from "./AuthSocialButton";
+import { Icons } from "@/components/ui/icons";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email().toLowerCase(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -32,16 +35,18 @@ const SignInForm = () => {
     },
   });
 
+  const router = useRouter();
+
   const onSubmit = (values: FormValues) => {
     console.log(values);
   };
 
   return (
     <div className="bg-white w-full relative p-4 md:p-6 lg:p-8 max-w-md rounded-3xl">
-      <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 md:hidden">
-        <Image src={"/images/ssu-logo.png"} width={150} height={150} alt="" />
+      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 md:hidden">
+        <Image src={"/images/ssu-logo.png"} width={100} height={100} alt="" />
       </div>
-      <div className="flex flex-col gap-4 mt-16 md:mt-0">
+      <div className="flex flex-col mt-12 md:mt-0">
         <div className="flex flex-col justify-center items-center text-base md:text-lg font-semibold">
           Sorsogon State University <span>Bulan Campus</span>
         </div>
@@ -91,6 +96,27 @@ const SignInForm = () => {
             >
               Submit
             </Button>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-center gap-[4px]">
+                <div className="h-px bg-neutral-300 w-14" />
+                <p className="text-neutral-500">or continue with</p>
+                <div className="h-px bg-neutral-300 w-14"></div>
+              </div>
+              <div className="flex gap-4">
+                <AuthSocialButton onClick={() => {}} icon={Icons.google} />
+                <AuthSocialButton onClick={() => {}} icon={Icons.github} />
+              </div>
+            </div>
+
+            <div className="group text-sm cursor-pointer justify-center w-full text-center">
+              <p className="text-neutral-500  mx-auto">
+                Don&apos;t have an account?{" "}
+                <span className="group-hover:text-neutral-800 group-hover:underline underline-offset-2">
+                  Sign up
+                </span>
+              </p>
+            </div>
           </form>
         </Form>
       </div>
