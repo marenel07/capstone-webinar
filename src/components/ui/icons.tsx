@@ -7,7 +7,7 @@ export const Icons = {
       viewBox="0 0 20 20"
       fill="none"
     >
-      <g clip-path="url(#clip0_135_1381)">
+      <g clipPath="url(#clip0_135_1381)">
         <path
           d="M19.805 10.2303C19.805 9.55056 19.7499 8.86711 19.6323 8.19836H10.2V12.0492H15.6014C15.3773 13.2911 14.6571 14.3898 13.6025 15.0879V17.5866H16.825C18.7174 15.8449 19.805 13.2728 19.805 10.2303Z"
           fill="#4285F4"
@@ -37,7 +37,7 @@ export const Icons = {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="25"
-      height="24"
+      height="25"
       viewBox="0 0 25 24"
       fill="none"
     >

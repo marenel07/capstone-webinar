@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import SignInForm from "../components/SignInForm";
-import Container from "@/components/Container";
 
 const SignInPage = () => {
   return (
