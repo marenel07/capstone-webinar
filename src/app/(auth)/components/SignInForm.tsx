@@ -109,7 +109,10 @@ const SignInForm = () => {
               </div>
             </div>
 
-            <div className="group text-sm cursor-pointer justify-center w-full text-center">
+            <div
+              onClick={() => router.push("/sign-up")}
+              className="group text-sm cursor-pointer justify-center w-full text-center"
+            >
               <p className="text-neutral-500  mx-auto">
                 Don&apos;t have an account?{" "}
                 <span className="group-hover:text-neutral-800 group-hover:underline underline-offset-2">

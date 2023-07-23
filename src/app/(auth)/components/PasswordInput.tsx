@@ -9,6 +9,7 @@ const PasswordInput: React.FC<InputProps> = ({
   onBlur,
   value,
   name,
+  disabled,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -20,12 +21,19 @@ const PasswordInput: React.FC<InputProps> = ({
         value={value}
         name={name}
         type={showPassword ? "text" : "password"}
+        disabled={disabled}
       />
       <div
         className="absolute right-2 top-2 cursor-pointer"
         onClick={() => setShowPassword(!showPassword)}
       >
-        {showPassword ? <EyeOff /> : <Eye />}
+        {showPassword ? (
+          <EyeOff
+            className={`${disabled && "cursor-not-allowed opacity-50"}`}
+          />
+        ) : (
+          <Eye />
+        )}
       </div>
     </div>
   );

@@ -18,6 +18,9 @@ import AuthSocialButton from "./AuthSocialButton";
 import { Icons } from "@/components/ui/icons";
 import { useRouter } from "next/navigation";
 import PasswordInput from "./PasswordInput";
+import axios from "axios";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -37,10 +40,23 @@ const SignUpForm = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    setLoading(true);
+    axios
+      .post("/api/register", values)
+      .catch((error) => {
+        toast({
+          description: error.response.data,
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -68,7 +84,7 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@email.com" {...field} />
+                    <Input {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,7 +98,7 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@email.com" {...field} />
+                    <Input {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +112,7 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput {...field} />
+                    <PasswordInput {...field} disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,6 +125,7 @@ const SignUpForm = () => {
             </div>
             <Button
               type="submit"
+              disabled={loading}
               className="w-full bg-maroon hover:bg-[#be0000]"
             >
               Sign up
@@ -127,7 +144,10 @@ const SignUpForm = () => {
           </div>
         </div>
 
-        <div className="group text-sm cursor-pointer justify-center w-full text-center">
+        <div
+          onClick={() => router.push("/sign-in")}
+          className="group text-sm cursor-pointer justify-center w-full text-center"
+        >
           <p className="text-neutral-500  mx-auto">
             Already have an account?{" "}
             <span className="group-hover:text-neutral-800 group-hover:underline underline-offset-2">
