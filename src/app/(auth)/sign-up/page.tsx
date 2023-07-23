@@ -3,7 +3,7 @@ import Image from "next/image";
 import SignInForm from "../components/SignInForm";
 import Container from "@/components/Container";
 
-const SignInPage = () => {
+const SignUpPage = () => {
   return (
     <div className="bg-maroon md:bg-white">
       <div className="grid grid-cols-12 w-full h-full min-h-screen overflow-y-auto">
@@ -23,4 +23,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default SignUpPage;

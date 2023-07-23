@@ -4,7 +4,7 @@ import { Button } from "../../../components/ui/button";
 
 interface AuthSocialButtonProps {
   //Type of icon
-  icon: SVGProps<SVGSVGElement>;
+  icon: React.ReactNode;
   onClick: () => void;
 }
 
@@ -33,7 +33,7 @@ const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
         hover:bg-gray-50 
         focus:outline-offset-0"
     >
-      {icon as ReactNode}
+      {icon}
     </Button>
   );
 };
