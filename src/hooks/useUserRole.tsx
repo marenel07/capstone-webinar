@@ -1,17 +1,15 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export default function useUserRole() {
   const [userRole, setUserRole] = useState<string>();
-  const session = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (session.data?.user) {
-      setUserRole(session?.data?.user.role);
+    if (status === "authenticated") {
+      setUserRole(session?.user.role);
     }
-  }, [session]);
+  }, [session, status]);
 
   const isAdmin = userRole === "ADMIN";
   const isUser = userRole === "USER";
