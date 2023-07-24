@@ -21,6 +21,7 @@ import PasswordInput from "./PasswordInput";
 import axios from "axios";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -56,6 +57,12 @@ const SignUpForm = () => {
       })
       .finally(() => {
         setLoading(false);
+        toast({
+          title: "Account created successfully",
+          description: "You can now sign in to your account",
+          variant: "default",
+        });
+        router.push("/sign-in");
       });
   };
 
@@ -139,8 +146,16 @@ const SignUpForm = () => {
             <div className="h-px bg-neutral-300 w-14"></div>
           </div>
           <div className="flex gap-4">
-            <AuthSocialButton onClick={() => {}} icon={Icons.google} />
-            <AuthSocialButton onClick={() => {}} icon={Icons.github} />
+            <AuthSocialButton
+              disabled={loading}
+              onClick={() => {}}
+              icon={Icons.google}
+            />
+            <AuthSocialButton
+              disabled={loading}
+              onClick={() => {}}
+              icon={Icons.github}
+            />
           </div>
         </div>
 

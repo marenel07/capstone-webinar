@@ -6,14 +6,17 @@ interface AuthSocialButtonProps {
   //Type of icon
   icon: React.ReactNode;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
   icon,
   onClick,
+  disabled,
 }) => {
   return (
     <Button
+      disabled={disabled}
       type="button"
       onClick={onClick}
       variant="outline"

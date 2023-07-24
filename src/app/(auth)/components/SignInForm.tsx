@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +17,9 @@ import { Button } from "../../../components/ui/button";
 import AuthSocialButton from "./AuthSocialButton";
 import { Icons } from "@/components/ui/icons";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   email: z.string().email().toLowerCase(),
@@ -35,10 +37,66 @@ const SignInForm = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const session = useSession();
+
   const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      router.push("/");
+      console.log("authenticated");
+    }
+  }, [session?.status, router]);
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    setLoading(true);
+    signIn("credentials", {
+      ...values,
+      redirect: false,
+    })
+      .then((callback) => {
+        if (callback?.error) {
+          toast({
+            description: callback.error,
+            variant: "destructive",
+          });
+        }
+        if (callback?.ok) {
+          toast({
+            description: "Successfully logged in!",
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const socialAction = (provider: string) => {
+    setLoading(true);
+
+    signIn(provider, {
+      redirect: false,
+    })
+      .then((callback) => {
+        if (callback?.error) {
+          toast({
+            description: callback.error,
+            variant: "destructive",
+          });
+        }
+        if (callback?.ok) {
+          toast({
+            description: "Successfully logged in!",
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -55,7 +113,7 @@ const SignInForm = () => {
         </h3>
       </div>
 
-      {/* form here */}
+      {/* Form */}
       <div className="flex flex-col gap-4 mt-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -66,7 +124,11 @@ const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@email.com" {...field} />
+                    <Input
+                      disabled={loading}
+                      placeholder="example@email.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +141,7 @@ const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" />
+                    <Input {...field} type="password" disabled={loading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,37 +153,45 @@ const SignInForm = () => {
               </p>
             </div>
             <Button
+              disabled={loading}
               type="submit"
               className="w-full bg-maroon hover:bg-[#be0000]"
             >
               Submit
             </Button>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-center gap-[4px]">
-                <div className="h-px bg-neutral-300 w-14" />
-                <p className="text-neutral-500">or continue with</p>
-                <div className="h-px bg-neutral-300 w-14"></div>
-              </div>
-              <div className="flex gap-4">
-                <AuthSocialButton onClick={() => {}} icon={Icons.google} />
-                <AuthSocialButton onClick={() => {}} icon={Icons.github} />
-              </div>
-            </div>
-
-            <div
-              onClick={() => router.push("/sign-up")}
-              className="group text-sm cursor-pointer justify-center w-full text-center"
-            >
-              <p className="text-neutral-500  mx-auto">
-                Don&apos;t have an account?{" "}
-                <span className="group-hover:text-neutral-800 group-hover:underline underline-offset-2">
-                  Sign up
-                </span>
-              </p>
-            </div>
           </form>
         </Form>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-center gap-[4px]">
+            <div className="h-px bg-neutral-300 w-14" />
+            <p className="text-neutral-500">or continue with</p>
+            <div className="h-px bg-neutral-300 w-14"></div>
+          </div>
+          <div className="flex gap-4">
+            <AuthSocialButton
+              disabled={loading}
+              onClick={() => socialAction("google")}
+              icon={Icons.google}
+            />
+            <AuthSocialButton
+              disabled={loading}
+              onClick={() => socialAction("github")}
+              icon={Icons.github}
+            />
+          </div>
+        </div>
+
+        <div
+          onClick={() => router.push("/sign-up")}
+          className="group text-sm cursor-pointer justify-center w-full text-center"
+        >
+          <p className="text-neutral-500  mx-auto">
+            Don&apos;t have an account?{" "}
+            <span className="group-hover:text-neutral-800 group-hover:underline underline-offset-2">
+              Sign up
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );
