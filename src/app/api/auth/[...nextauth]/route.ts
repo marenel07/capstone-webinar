@@ -83,6 +83,9 @@ export const authOptions: AuthOptions = {
         role: dbUser.role,
       };
     },
+    redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
   debug: process.env.NODE_ENV === "development",
   session: {

@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import useUserRole from "@/hooks/useUserRole";
 
 const formSchema = z.object({
   email: z.string().email().toLowerCase(),
@@ -47,13 +48,12 @@ const SignInForm = () => {
   useEffect(() => {
     if (session?.status === "authenticated") {
       router.push("/");
-      console.log("authenticated");
     }
   }, [session?.status, router]);
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = async (values: FormValues) => {
     setLoading(true);
-    signIn("credentials", {
+    await signIn("credentials", {
       ...values,
       redirect: false,
     })
@@ -63,11 +63,11 @@ const SignInForm = () => {
             description: callback.error,
             variant: "destructive",
           });
-        }
-        if (callback?.ok) {
+        } else if (callback?.ok) {
           toast({
             description: "Successfully logged in!",
           });
+          router.push("/");
         }
       })
       .finally(() => {
@@ -75,28 +75,21 @@ const SignInForm = () => {
       });
   };
 
-  const socialAction = (provider: string) => {
-    setLoading(true);
-
-    signIn(provider, {
-      redirect: false,
-    })
-      .then((callback) => {
-        if (callback?.error) {
-          toast({
-            description: callback.error,
-            variant: "destructive",
-          });
-        }
-        if (callback?.ok) {
-          toast({
-            description: "Successfully logged in!",
-          });
-        }
-      })
-      .finally(() => {
-        setLoading(false);
+  const socialAction = async (provider: string) => {
+    try {
+      setLoading(true);
+      await signIn(provider, {
+        callbackUrl: "/",
       });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

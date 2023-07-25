@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
-import { Input, InputProps } from "../../../components/ui/input";
+import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import AuthSocialButton from "./AuthSocialButton";
 import { Icons } from "@/components/ui/icons";
@@ -64,6 +64,23 @@ const SignUpForm = () => {
         });
         router.push("/sign-in");
       });
+  };
+
+  const socialAction = async (provider: string) => {
+    try {
+      setLoading(true);
+      await signIn(provider, {
+        callbackUrl: "/",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -148,12 +165,12 @@ const SignUpForm = () => {
           <div className="flex gap-4">
             <AuthSocialButton
               disabled={loading}
-              onClick={() => {}}
+              onClick={() => socialAction("google")}
               icon={Icons.google}
             />
             <AuthSocialButton
               disabled={loading}
-              onClick={() => {}}
+              onClick={() => socialAction("github")}
               icon={Icons.github}
             />
           </div>
