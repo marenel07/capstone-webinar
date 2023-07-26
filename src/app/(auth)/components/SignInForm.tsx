@@ -20,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
-import useUserRole from "@/hooks/useUserRole";
 
 const formSchema = z.object({
   email: z.string().email().toLowerCase(),

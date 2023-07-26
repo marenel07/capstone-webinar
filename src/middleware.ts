@@ -58,16 +58,20 @@ export default withAuth(
     const isUser = token?.role === "USER";
 
     if (req.nextUrl.pathname === "/") {
+      if (isUser) {
+        return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL("/admin", req.nextUrl));
+      }
+    } else if (isAdmin && req.nextUrl.pathname.startsWith("/admin")) {
       return NextResponse.next();
-    } else if (isAdmin && req.nextUrl.pathname === "/admin") {
-      return NextResponse.next();
-    } else if (isUser && req.nextUrl.pathname === "/admin") {
+    } else if (isUser && req.nextUrl.pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/", req.nextUrl));
-    } else if (isUser && req.nextUrl.pathname === "/user") {
+    } else if (isUser && req.nextUrl.pathname.startsWith("/user")) {
       return NextResponse.next();
     } else {
       return NextResponse.redirect(
-        new URL(`/${isAdmin ? "admin" : "user"}`, req.nextUrl)
+        new URL(`/${isAdmin ? "admin" : ""}`, req.nextUrl)
       );
     }
   },

@@ -20,6 +20,7 @@ module.exports = {
         maroon: "#800000",
         // bgColor: "#DCD1D1",
         bgColor: "rgba(236, 240, 243, 1)",
+        bgMain: "#1E1E2D",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

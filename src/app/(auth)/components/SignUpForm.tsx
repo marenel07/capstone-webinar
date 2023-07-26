@@ -19,9 +19,9 @@ import { Icons } from "@/components/ui/icons";
 import { useRouter } from "next/navigation";
 import PasswordInput from "./PasswordInput";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -44,6 +44,14 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  const session = useSession();
+
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      router.push("/");
+    }
+  }, [session?.status, router]);
 
   const onSubmit = (values: FormValues) => {
     setLoading(true);
