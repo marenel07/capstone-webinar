@@ -1,5 +1,6 @@
 "use client";
 
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
@@ -9,20 +10,21 @@ interface UserInactivityProps {
 
 const UserInactivity: React.FC<UserInactivityProps> = ({ children }) => {
   const session = useSession();
+  const isVisible = usePageVisibility();
   const [idleTime, setIdleTime] = useState(0);
 
   useEffect(() => {
-    if (session) {
+    if (session || !isVisible) {
       const timer = setInterval(() => {
         setIdleTime((idleTime) => idleTime + 1);
       }, 1000); // increment idle time every second
 
       return () => clearInterval(timer);
     }
-  }, [session]);
+  }, [session, isVisible]);
 
   useEffect(() => {
-    if (idleTime >= 600) {
+    if (idleTime >= 120) {
       signOut();
     }
   }, [idleTime]);

@@ -91,6 +91,8 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
+    // 1 minutes maxAge
+    maxAge: 1 * 60,
   },
   pages: {
     signIn: "/sign-in",
