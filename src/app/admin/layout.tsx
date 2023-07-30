@@ -1,5 +1,6 @@
 import AdminSidebar from "@/components/Navbars/AdminSidebar";
 import Topbar from "@/components/Navbars/Topbar";
+import BreadCrumbsLayout from "@/components/breadcrumbs/BreadCrumbsLayout";
 import { getAuthSession } from "@/lib/auth";
 
 interface AdminLayoutProps {
@@ -13,6 +14,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = async ({ children }) => {
     <div className="h-full">
       <AdminSidebar />
       <Topbar session={session} />
+      <BreadCrumbsLayout />
       {children}
     </div>
   );

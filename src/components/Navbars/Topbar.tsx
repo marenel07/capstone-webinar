@@ -30,9 +30,9 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
     .toUpperCase();
 
   return (
-    <div className="fixed w-[calc(100%-237px)] right-0 top-0 bg-white">
-      <PageLayout>
-        <div className="py-2 px-6 border-b border-neutral-200 flex items-center justify-end gap-3">
+    <div>
+      <PageLayout className="fixed w-full right-0 top-0 bg-white">
+        <div className="py-2 px-6 border-b border-neutral-200 flex items-center justify-end gap-3 ">
           <p className="text-sm"> Hi {session?.user?.name} </p>
           <div className="cursor-pointer">
             <DropdownMenu>

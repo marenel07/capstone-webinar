@@ -6,9 +6,9 @@ import {
   ChevronsRight,
   HomeIcon,
   MoreHorizontal,
-  PlusCircle,
   Video,
   Videotape,
+  Webcam,
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -95,10 +95,10 @@ const AdminSidebar = () => {
 
               <SidebarItem
                 active={active}
-                href="/admin/create"
-                icon={PlusCircle}
-                label="Create Webinar"
-                activeLabel="create"
+                href="/admin/my-webinars"
+                icon={Webcam}
+                label="My Webinars"
+                activeLabel="my-webinars"
               />
 
               <SidebarItem
