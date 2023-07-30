@@ -24,7 +24,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       href={href}
       className={
         active === activeLabel
-          ? `text-neutral-200 text-sm rounded-sm bg-slate-500 px-3 py-2 flex gap-3 ${
+          ? `text-white text-sm rounded-sm bg-slate-500 px-3 py-2 flex gap-3 ${
               isCollapsed
                 ? "items-center justify-center"
                 : "items-center justify-start"

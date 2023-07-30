@@ -23,7 +23,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       className={cn(
         ` ${isSidebarCollapsed ? "ml-[74px]" : "ml-[237px]"} ${
           isFixed && "fixed ml-0"
-        } transition-all duration-200 ease-in-out`,
+        }`,
         className
       )}
     >

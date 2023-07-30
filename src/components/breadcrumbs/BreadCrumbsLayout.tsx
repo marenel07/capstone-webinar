@@ -28,7 +28,7 @@ const BreadCrumbsLayout = () => {
     pathArray = pathArray.filter((path) => path !== "");
 
     const breadcrumbs = pathArray.map((path, index) => {
-      const href = "/" + pathArray.slice(0, index + 1).join("/");
+      const href = "/admin/" + pathArray.slice(0, index + 1).join("/");
       return {
         href,
         label:
@@ -49,7 +49,7 @@ const BreadCrumbsLayout = () => {
       isFixed
       className={`right-0 top-[57px]  w-full ${
         isCollapsed ? "left-[74px]" : "left-[237px]"
-      } border-b border-neutral-200`}
+      } border-b border-neutral-200 shadow-lg`}
     >
       <div className="bg-white w-full h-[50px] flex items-center">
         <BreadCrumbs items={breadcrumbs} />

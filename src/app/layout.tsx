@@ -5,7 +5,11 @@ import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/providers/AuthProvider";
 
-const poppins = Poppins({ subsets: ["devanagari"], weight: ["400", "600"] });
+const poppins = Poppins({
+  subsets: ["devanagari"],
+  weight: ["400", "600"],
+  fallback: ["system-ui", "arial"],
+});
 
 export const metadata: Metadata = {
   title: "SSU-BC Webinar Mangaement System",

@@ -22,12 +22,12 @@ const BreadCrumbs = ({ items }: BreadcrumbsProps) => {
               <Link
                 href={crumb.href}
                 key={i}
-                className="text-indigo-500 hover:text-indigo-400 hover:underline cursor-pointer"
+                className="text-neutral-500 hover:text-neutral-400 hover:underline cursor-pointer"
               >
                 {crumb.label}
               </Link>
               {/* separator */}
-              <span> / </span>
+              <span> &gt; </span>
             </>
           );
         } else {

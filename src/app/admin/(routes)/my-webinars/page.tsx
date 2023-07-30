@@ -1,12 +1,15 @@
-import Link from "next/link";
+import PageLayout from "@/components/PageLayout";
 import React from "react";
+import WebinarLists from "./components/WebinarLists";
 
-const page = () => {
+const WebinarsPage = () => {
   return (
-    <div className="ml-[266px]">
-      <Link href={"/admin/create/settings"}>Settings</Link>
+    <div className="bg-slate-100 h-full pt-[107px]">
+      <PageLayout>
+        <WebinarLists />
+      </PageLayout>
     </div>
   );
 };
 
-export default page;
+export default WebinarsPage;

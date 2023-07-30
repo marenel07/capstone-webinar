@@ -46,6 +46,10 @@ model User {
   hashedPassword String?
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  participants  Participant[]
+  webinars      Webinar[]
   accounts      Account[]
   sessions      Session[]
   role          ROLE     @default(USER)
@@ -56,3 +60,35 @@ enum ROLE {
   USER
 }
 
+//Webinar model
+
+model Webinar {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  date        DateTime
+  time        DateTime
+  image       String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  participants Participant[]
+}
+
+model Participant {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  webinar   Webinar  @relation(fields: [webinarId], references: [id], onDelete: Cascade)
+  webinarId String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+  name      String
+  email     String
+  number    Int
+  age       Int
+  address   String
+  occupation String
+  company   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
