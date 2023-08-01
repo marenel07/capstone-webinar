@@ -46,6 +46,11 @@ model User {
   hashedPassword String?
   emailVerified DateTime?
   image         String?
+  isVerified    Boolean  @default(false)
+  forgotPasswordToken String?
+  forgotPasswordTokenExpiry DateTime?
+  verificationToken String?
+  verificationTokenExpiry DateTime?
   participants  Participant[]
   webinars      Webinar[]
   accounts      Account[]
@@ -66,7 +71,7 @@ model Webinar {
   description String
   date        DateTime
   time        DateTime
-  image       String
+  imageUrl       String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String   @db.ObjectId
   createdAt   DateTime @default(now())

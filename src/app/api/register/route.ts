@@ -1,6 +1,7 @@
-import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prismadb";
+import bcrypt from 'bcrypt';
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prismadb';
+import { sendEmail } from '@/lib/mailer';
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
     const { name, email, password } = body;
 
     if (!name || !email || !password) {
-      return new NextResponse("Missing information", { status: 400 });
+      return new NextResponse('Missing information', { status: 400 });
     }
 
     const userExists = await prisma.user.findUnique({
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
     });
 
     if (userExists) {
-      return new NextResponse("User already exists", { status: 400 });
+      return new NextResponse('User already exists', { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -32,9 +33,16 @@ export async function POST(req: Request) {
       },
     });
 
+    //send email verification
+    await sendEmail({
+      email,
+      emailType: 'VERIFY',
+      userId: user.id,
+    });
+
     return NextResponse.json(user);
   } catch (error: any) {
-    console.error(error, "REGISTRATION_ERROR");
-    return new NextResponse("Internal server error", { status: 500 });
+    console.error(error, 'REGISTRATION_ERROR');
+    return new NextResponse('Internal server error', { status: 500 });
   }
 }
