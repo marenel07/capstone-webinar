@@ -75,7 +75,7 @@ export function ImageUpload<TFieldValues extends FieldValues>({
       }
     },
 
-    [setFiles, setValue, name]
+    [setFiles, setValue, name, setHasImage]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
