@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,7 +20,9 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { X } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
+import { TimePicker } from 'react-time-picker-typescript';
+import 'react-time-picker-typescript/dist/style.css';
 
 import { generateReactHelpers } from '@uploadthing/react/hooks';
 import { OurFileRouter } from '@/app/api/uploadthing/core';
@@ -27,22 +30,26 @@ import Image from 'next/image';
 import type { FileWithPreview } from '@/types';
 import { ImageUpload } from '@/components/ImageUpload';
 import { toast } from '@/components/ui/use-toast';
-import { isArrayOfFile } from '@/lib/utils';
+import { cn, isArrayOfFile } from '@/lib/utils';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Name is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
   speaker: z.string().min(1, { message: 'Speaker is required' }),
-  images: z
-    .unknown()
-    .refine((val) => {
-      if (!Array.isArray(val)) return false;
-      if (val.some((file) => !(file instanceof File))) return false;
-      return true;
-    }, 'Must be an array of File')
-    .default(null),
-  // time: z.string().min(1, { message: 'Time is required' }),
-  // date: z.date().min(new Date(), { message: 'Date is required' }),
+  images: z.unknown().refine((val) => {
+    if (!Array.isArray(val)) return false;
+    if (val.some((file) => !(file instanceof File))) return false;
+    return true;
+  }, 'Must be an array of File'),
+  time: z.string().min(1, { message: 'Time is required' }),
+  date: z.date().min(new Date(), { message: 'Date is required' }),
 });
 
 type WebinarFormValues = z.infer<typeof formSchema>;
@@ -73,13 +80,19 @@ const CreateWebinarPage = () => {
       title: '',
       description: '',
       speaker: '',
-      //   time: '',
-      //   date: new Date(),
+      time: '10:00',
+      date: new Date(),
       images: [],
     },
   });
 
+  const [hasImage, setHasImage] = useState(false);
+
   const onSubmit = async (values: WebinarFormValues) => {
+    if (values.images) {
+      setHasImage(true);
+    }
+
     const imageUrl = isArrayOfFile(values.images)
       ? await startUpload(values.images).then((res) => {
           const formattedImages = res?.map((image) => ({
@@ -93,6 +106,7 @@ const CreateWebinarPage = () => {
         })
       : null;
 
+    console.log(values);
     console.log(imageUrl);
   };
 
@@ -122,6 +136,7 @@ const CreateWebinarPage = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -138,6 +153,7 @@ const CreateWebinarPage = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -156,25 +172,42 @@ const CreateWebinarPage = () => {
                               {...field}
                             />
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
                   <div className='w-300px'>
                     <FormItem>
-                      <FormLabel>Image banner</FormLabel>
+                      <FormLabel>
+                        <span
+                          className={`${
+                            form.formState.isSubmitted &&
+                            !hasImage &&
+                            'text-red-500'
+                          }`}
+                        >
+                          Image banner
+                        </span>
+                      </FormLabel>
                       <FormControl>
                         <ImageUpload
                           setValue={form.setValue}
                           name='images'
-                          files={files}
                           setFiles={setFiles}
                           isUploading={isUploading}
                           isPending={isPending}
+                          setHasImage={setHasImage}
                         />
                       </FormControl>
+                      {form.formState.isSubmitted && !hasImage && (
+                        <p className='text-red-500 text-[13px]'>
+                          Image is required
+                        </p>
+                      )}
                     </FormItem>
                   </div>
+
                   <div className='w-full md:aspect-[2.4/1] bg-cover relative group'>
                     {preview && (
                       <div className='col-span-2'>
@@ -187,7 +220,10 @@ const CreateWebinarPage = () => {
                               variant='secondary'
                               size='icon'
                               className='text-sm text-slate-500 rounded-full'
-                              onClick={() => setFiles(null)}
+                              onClick={() => {
+                                setFiles(null);
+                                setHasImage(false);
+                              }}
                             >
                               <X className='h-5 w-5' />
                             </Button>
@@ -196,10 +232,74 @@ const CreateWebinarPage = () => {
                       </div>
                     )}
                   </div>
-                  <Button type='submit' disabled={loading} className='mr-auto'>
-                    Create Webinar
-                  </Button>
+
+                  <FormField
+                    control={form.control}
+                    name='time'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Webinar session speaker</FormLabel>
+                        <FormControl>
+                          <Input
+                            className='w-[240px] cursor-pointer hover:bg-primary-foreground bg-none'
+                            type='time'
+                            disabled={loading}
+                            placeholder='Time of webinar session'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='date'
+                    render={({ field }) => (
+                      <FormItem className='flex flex-col gap-[10px] '>
+                        <FormLabel>Date of Webinar</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'w-[240px] pl-3 text-left',
+                                  !field.value && 'text-muted-foreground'
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'PPP')
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className='w-auto p-0' align='center'>
+                            <Calendar
+                              mode='single'
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) => date < new Date()}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
+                <Button
+                  type='submit'
+                  disabled={loading}
+                  className='mr-auto mt-8'
+                >
+                  Create Webinar
+                </Button>
               </form>
             </Form>
           </div>

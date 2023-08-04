@@ -16,24 +16,25 @@ import {
   type FileRejection,
 } from 'react-dropzone';
 import { useCallback } from 'react';
+import { set } from 'date-fns';
 
 interface ImageUploadProps<TFieldValues extends FieldValues>
   extends React.HTMLAttributes<HTMLDivElement> {
   name: Path<TFieldValues>;
   setValue: UseFormSetValue<TFieldValues>;
-  files: FileWithPreview[] | null;
   setFiles: React.Dispatch<React.SetStateAction<FileWithPreview[] | null>>;
   isUploading?: boolean;
   isPending?: boolean;
+  setHasImage?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function ImageUpload<TFieldValues extends FieldValues>({
   name,
   setValue,
-  files,
   setFiles,
   isUploading,
   isPending,
+  setHasImage,
 }: ImageUploadProps<TFieldValues>) {
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[], rejectedFiles: FileRejection[]) => {
@@ -52,6 +53,8 @@ export function ImageUpload<TFieldValues extends FieldValues>({
           })
         )
       );
+
+      setHasImage && setHasImage(true);
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ errors }) => {
