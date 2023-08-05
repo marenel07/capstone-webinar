@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { AuthOptions, getServerSession } from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -55,34 +55,52 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      if (token) {
+      if (token && session?.user) {
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.role = token.role;
+        session.user.isOAuth = token.isOAuth;
       }
       return session;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
       const dbUser = await prisma.user.findFirst({
         where: {
           email: token?.email,
         },
       });
+
+      const accountUser = await prisma.account.findFirst({
+        where: {
+          userId: token?.id,
+        },
+      });
+
       if (!dbUser) {
         token.id = user!.id;
         return token;
       }
 
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        picture: dbUser.image,
-        role: dbUser.role,
-      };
+      if (accountUser) {
+        token.id = dbUser.id;
+        token.name = dbUser.name;
+        token.email = dbUser.email;
+        token.picture = dbUser.image;
+        token.role = dbUser.role;
+        token.isOAuth = accountUser?.type === 'oauth';
+      } else {
+        token.id = dbUser.id;
+        token.name = dbUser.name;
+        token.email = dbUser.email;
+        token.picture = dbUser.image;
+        token.role = dbUser.role;
+        token.isOAuth = false;
+      }
+
+      return token;
     },
     redirect({ url, baseUrl }) {
       return url.startsWith(baseUrl) ? url : baseUrl;
@@ -91,12 +109,10 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
-    // maxAge: 1 * 60,
+    maxAge: 1 * 60,
   },
   pages: {
     signIn: '/sign-in',
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
-export const getAuthSession = () => getServerSession(authOptions);

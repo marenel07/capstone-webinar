@@ -36,8 +36,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
+import axios from 'axios';
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Name is required' }),
@@ -89,25 +90,46 @@ const CreateWebinarPage = () => {
   const [hasImage, setHasImage] = useState(false);
 
   const onSubmit = async (values: WebinarFormValues) => {
-    if (values.images) {
-      setHasImage(true);
-    }
+    startTransition(async () => {
+      try {
+        setLoading(true);
+        if (values.images) {
+          setHasImage(true);
+        }
 
-    const imageUrl = isArrayOfFile(values.images)
-      ? await startUpload(values.images).then((res) => {
-          const formattedImages = res?.map((image) => ({
-            id: image.fileKey,
-            name: image.fileKey.split('_')[1] ?? image.fileKey,
-            url: image.fileUrl,
-          }));
-          return formattedImages?.[0]?.url
-            ? (formattedImages[0].url as string)
-            : null;
-        })
-      : null;
+        const imageUrl = isArrayOfFile(values.images)
+          ? await startUpload(values.images).then((res) => {
+              const formattedImages = res?.map((image) => ({
+                id: image.fileKey,
+                name: image.fileKey.split('_')[1] ?? image.fileKey,
+                url: image.fileUrl,
+              }));
+              return formattedImages?.[0]?.url
+                ? (formattedImages[0].url as string)
+                : null;
+            })
+          : null;
 
-    console.log(values);
-    console.log(imageUrl);
+        await axios.post('/api/webinar', {
+          ...values,
+          imageUrl,
+        });
+
+        toast({
+          description: 'Webinar created successfully',
+        });
+        form.reset();
+        setFiles(null);
+        setHasImage(false);
+      } catch (error: any) {
+        toast({
+          variant: 'destructive',
+          description: error.response.data,
+        });
+      } finally {
+        setLoading(false);
+      }
+    });
   };
 
   return (
@@ -263,6 +285,7 @@ const CreateWebinarPage = () => {
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
+                                disabled={loading}
                                 variant={'outline'}
                                 className={cn(
                                   'w-[240px] pl-3 text-left',

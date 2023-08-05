@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { signOut } from 'next-auth/react';
+import { getToken } from 'next-auth/jwt';
 
 interface TopbarProps {
   session?: Session | null;
@@ -21,6 +22,8 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
   const handleSignOut = () => {
     signOut();
   };
+
+  console.log(session?.user.isOAuth);
 
   // get the user name initials
   const userInitial = session?.user?.name
@@ -53,6 +56,11 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
                 >
                   Sign out
                 </DropdownMenuItem>
+                {/* {session?.user.provider === 'credentials' && (
+                  <DropdownMenuItem className='cursor-pointer'>
+                    Change Password
+                  </DropdownMenuItem>
+                )} */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
