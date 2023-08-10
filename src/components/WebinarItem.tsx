@@ -48,7 +48,7 @@ const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
             <div className='flex items-center gap-2'>
               <span className='text-sm text-neutral-500'>When:</span>
               <span className='text-sm text-neutral-700'>
-                {data.date} ({data.time} AM)
+                {data.date} ({data.time})
               </span>
             </div>
             <div className='flex items-center gap-2'>
