@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useSidebarCollapse } from "@/hooks/useSidebarCollapse";
-import { cn } from "@/lib/utils";
+import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
+import { cn } from '@/lib/utils';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -21,9 +21,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   return (
     <div
       className={cn(
-        ` ${isSidebarCollapsed ? "ml-[74px]" : "ml-[237px]"} ${
-          isFixed && "fixed ml-0"
-        }`,
+        ` ${isSidebarCollapsed ? 'lg:ml-[74px]' : 'lg:ml-[237px]'} ml-0`,
         className
       )}
     >

@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { signOut } from 'next-auth/react';
-import { getToken } from 'next-auth/jwt';
 
 interface TopbarProps {
   session?: Session | null;
@@ -23,8 +22,6 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
     signOut();
   };
 
-  console.log(session?.user.isOAuth);
-
   // get the user name initials
   const userInitial = session?.user?.name
     ?.split(' ')
@@ -34,7 +31,7 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
 
   return (
     <div>
-      <PageLayout className='fixed w-full right-0 top-0 bg-white'>
+      <PageLayout className='fixed w-full right-0 top-0 bg-white z-40'>
         <div className='py-2 px-6 border-b border-neutral-200 flex items-center justify-end gap-3 '>
           <p className='text-sm'> Hi {session?.user?.name} </p>
           <div className='cursor-pointer'>

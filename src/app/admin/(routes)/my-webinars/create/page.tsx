@@ -20,9 +20,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { CalendarIcon, X } from 'lucide-react';
-import { TimePicker } from 'react-time-picker-typescript';
-import 'react-time-picker-typescript/dist/style.css';
+import { CalendarIcon, CheckCircle, X } from 'lucide-react';
 
 import { generateReactHelpers } from '@uploadthing/react/hooks';
 import { OurFileRouter } from '@/app/api/uploadthing/core';
@@ -36,7 +34,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { format, set } from 'date-fns';
+import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import axios from 'axios';
 
@@ -115,12 +113,19 @@ const CreateWebinarPage = () => {
           imageUrl,
         });
 
-        toast({
-          description: 'Webinar created successfully',
-        });
         form.reset();
         setFiles(null);
         setHasImage(false);
+        router.refresh();
+        router.push('/admin/my-webinars');
+        toast({
+          description: (
+            <div className='flex gap-2 items-center'>
+              <CheckCircle className='w-6 h-6 text-green-600' />
+              <span>Webinar created successfully</span>
+            </div>
+          ),
+        });
       } catch (error: any) {
         toast({
           variant: 'destructive',
@@ -133,7 +138,7 @@ const CreateWebinarPage = () => {
   };
 
   return (
-    <div className='bg-slate-100'>
+    <div className='bg-slate-100 min-h-screen'>
       <PageLayout>
         <div className='max-w-screen-lg mx-auto pt-[107px]'>
           <div className='flex flex-col space-y-4 p-6'>
