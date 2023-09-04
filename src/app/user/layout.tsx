@@ -1,7 +1,7 @@
 import getSession from '@/actions/getSession';
-import AdminSidebar from '@/components/navbars/AdminSidebar';
 import Topbar from '@/components/navbars/Topbar';
 import BreadCrumbsLayout from '@/components/breadcrumbs/BreadCrumbsLayout';
+import UserSidebar from '@/components/navbars/UserSidebar';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = async ({ children }) => {
 
   return (
     <div className='h-full'>
-      <AdminSidebar />
+      <UserSidebar />
       <Topbar session={session} />
       <BreadCrumbsLayout />
       {children}

@@ -2,20 +2,20 @@
 
 import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
 import {
+  Award,
   ChevronsLeft,
   ChevronsRight,
   HomeIcon,
   MoreHorizontal,
   Video,
   Videotape,
-  Webcam,
 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarItem from './SidebarItem';
 
-const AdminSidebar = () => {
+const UserSidebar = () => {
   const pathname = usePathname();
   const route = pathname.split('/')[2];
   const activeRoute = route === undefined ? 'home' : route;
@@ -95,18 +95,18 @@ const AdminSidebar = () => {
 
               <SidebarItem
                 active={active}
-                href='/admin/my-webinars'
-                icon={Webcam}
-                label='My Webinars'
-                activeLabel='my-webinars'
+                href='/user/recordings'
+                icon={Videotape}
+                label='Recordings'
+                activeLabel='recordings'
               />
 
               <SidebarItem
                 active={active}
-                href='/admin/recordings'
-                icon={Videotape}
-                label='Recordings'
-                activeLabel='recordings'
+                href='/user/certificates'
+                icon={Award}
+                label='Certificates'
+                activeLabel='certificates'
               />
             </ul>
           </div>
@@ -116,4 +116,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default UserSidebar;
