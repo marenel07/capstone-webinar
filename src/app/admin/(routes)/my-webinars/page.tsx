@@ -1,5 +1,4 @@
 import PageLayout from '@/components/PageLayout';
-import React from 'react';
 import WebinarLists from './components/WebinarLists';
 import getWebinars from '@/actions/getWebinars';
 import { format } from 'date-fns';

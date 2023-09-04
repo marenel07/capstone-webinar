@@ -2,25 +2,14 @@ import { cache } from 'react';
 import getCurrentUser from './getCurrentUser';
 import prisma from '@/lib/prismadb';
 
-const getWebinars = cache(async () => {
+const getAllWebinars = cache(async () => {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       return null;
     }
 
-    const webinars = await prisma.webinar.findMany({
-      where: {
-        authorId: currentUser.id,
-      },
-      include: {
-        participants: {
-          include: {
-            user: true,
-          },
-        },
-      },
-    });
+    const webinars = await prisma.webinar.findMany();
 
     if (!webinars) {
       return null;
@@ -33,4 +22,4 @@ const getWebinars = cache(async () => {
   }
 });
 
-export default getWebinars;
+export default getAllWebinars;
