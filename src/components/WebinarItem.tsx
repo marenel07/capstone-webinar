@@ -13,6 +13,7 @@ import { Zoom } from './ZoomImage';
 import { Webinar } from '@/types/types';
 import { Button } from './ui/button';
 import { Play, Settings2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface WebinarItemProps {
   data: Webinar;
@@ -20,6 +21,8 @@ interface WebinarItemProps {
 }
 
 const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
+  const router = useRouter();
+
   return (
     <Card className={cn('flex flex-col min-h-fit overflow-hidden', className)}>
       <div className='flex relative'>
@@ -63,7 +66,7 @@ const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
               <Settings2 size={20} className='hidden lg:block mr-2' />
               <span>Manage</span>
             </Button>
-            <Button>
+            <Button onClick={() => router.push(`/session/${data.id}`)}>
               <Play size={20} className='hidden lg:block mr-2' />
               <span>Start Session</span>
             </Button>

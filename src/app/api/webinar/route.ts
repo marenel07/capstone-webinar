@@ -25,6 +25,13 @@ export async function POST(req: Request) {
         time,
         date,
         authorId: user.id,
+        participants: {
+          create: [
+            {
+              userId: user.id,
+            },
+          ],
+        },
       },
     });
 
