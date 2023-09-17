@@ -7,4 +7,6 @@ export type Webinar = {
   authorId: string;
   speaker: string;
   description: string;
+  isStarted: boolean;
+  isPosted: boolean;
 };

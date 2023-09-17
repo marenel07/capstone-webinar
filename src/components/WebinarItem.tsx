@@ -14,6 +14,9 @@ import { Webinar } from '@/types/types';
 import { Button } from './ui/button';
 import { Play, Settings2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useToast } from './ui/use-toast';
+import axios from 'axios';
 
 interface WebinarItemProps {
   data: Webinar;
@@ -21,7 +24,27 @@ interface WebinarItemProps {
 }
 
 const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
+  const { toast } = useToast();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleStart = async () => {
+    try {
+      setLoading(true);
+
+      await axios.patch(`/api/webinar/${data.id}/session`);
+
+      router.push(`/session/${data?.id}`);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: 'Error',
+        description: "Something went wrong. We couldn't start the session.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card className={cn('flex flex-col min-h-fit overflow-hidden', className)}>
@@ -63,6 +86,7 @@ const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
         <CardFooter>
           <div className='flex gap-8'>
             <Button
+              disabled={loading}
               variant='secondary'
               onClick={() =>
                 router.push(`/admin/my-webinars/${data.id}/manage`)
@@ -71,7 +95,7 @@ const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
               <Settings2 size={20} className='hidden lg:block mr-2' />
               <span>Manage</span>
             </Button>
-            <Button onClick={() => router.push(`/session/${data.id}`)}>
+            <Button disabled={loading} onClick={handleStart}>
               <Play size={20} className='hidden lg:block mr-2' />
               <span>Start Session</span>
             </Button>

@@ -66,7 +66,7 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
         <CardFooter>
           <div className='flex gap-8 group'>
             <Button
-              disabled={false}
+              disabled={!data?.isStarted}
               onClick={() => router.push(`/session/${data?.id}`)}
               className='flex items-center'
             >
