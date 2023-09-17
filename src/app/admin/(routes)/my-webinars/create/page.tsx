@@ -67,8 +67,7 @@ const CreateWebinarPage = () => {
       key={file.preview}
       src={file.preview}
       alt='preview'
-      width={472}
-      height={250}
+      fill
       className='md:aspect-[2.4/1] object-cover object-center'
     />
   ));
@@ -140,8 +139,8 @@ const CreateWebinarPage = () => {
   return (
     <div className='bg-slate-100 min-h-screen'>
       <PageLayout>
-        <div className='max-w-screen-lg mx-auto pt-[107px]'>
-          <div className='flex flex-col space-y-4 p-6'>
+        <div className='container pt-[107px]'>
+          <div className='flex flex-col space-y-4 py-6'>
             <Heading
               title='Create Webinar'
               description='Create webinar session and invite your attendees'
@@ -159,7 +158,7 @@ const CreateWebinarPage = () => {
                         <FormControl>
                           <Input
                             disabled={loading}
-                            placeholder='Billbord label'
+                            placeholder='Webinar title'
                             {...field}
                           />
                         </FormControl>
@@ -242,7 +241,7 @@ const CreateWebinarPage = () => {
                           <div className=' md:aspect-[2.4/1] bg-cover mt-8'>
                             {preview}
                           </div>
-                          <div className='absolute top-8 right-4 opacity-0 transition-all group-hover:opacity-100'>
+                          <div className='absolute top-4 right-4 opacity-0 transition-all group-hover:opacity-100'>
                             <Button
                               variant='secondary'
                               size='icon'

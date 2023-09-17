@@ -73,6 +73,8 @@ model Webinar {
   date        DateTime
   time        String
   imageUrl       String
+  isPosted    Boolean  @default(false)
+  isStarted  Boolean  @default(false)
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String   @db.ObjectId
   createdAt   DateTime @default(now())

@@ -15,94 +15,80 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import qs from 'query-string';
 
-import { CheckCircle, X } from 'lucide-react';
-
-import { generateReactHelpers } from '@uploadthing/react/hooks';
-import { OurFileRouter } from '@/app/api/uploadthing/core';
-import Image from 'next/image';
-import type { FileWithPreview } from '@/types';
+import { CheckCircle } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { cn, isArrayOfFile } from '@/lib/utils';
 import axios from 'axios';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   email: z.string().email({ message: 'Invalid email' }),
-  number: z.number().min(1, { message: 'Number is required' }),
-  age: z.number().min(1, { message: 'Age is required' }),
+  number: z.string().min(1, { message: 'Number is required' }),
+  age: z.string().min(1, { message: 'Age is required' }),
   address: z.string().min(1, { message: 'Address is required' }),
   occupation: z.string().min(1, { message: 'Occupation is required' }),
-  school: z.string().min(1, { message: 'Name of school/company is required' }),
+  company: z.string().min(1, { message: 'Name of school/company is required' }),
 });
 
 type WebinarFormValues = z.infer<typeof formSchema>;
 
-const CreateWebinarPage = () => {
-  const [loading, setLoading] = useState(false);
+const CreateWebinarPage = ({ params }: { params: { webinarId: string } }) => {
   const router = useRouter();
-
-  const [files, setFiles] = useState<FileWithPreview[] | null>(null);
-  const { useUploadThing } = generateReactHelpers<OurFileRouter>();
-  const [isPending, startTransition] = useTransition();
-
-  const preview = files?.map((file) => (
-    <Image
-      key={file.preview}
-      src={file.preview}
-      alt='preview'
-      width={472}
-      height={250}
-      className='md:aspect-[2.4/1] object-cover object-center'
-    />
-  ));
 
   const form = useForm<WebinarFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       email: '',
-      number: null as any,
-      age: null as any,
+      number: '',
+      age: '',
       address: '',
       occupation: '',
-      school: '',
+      company: '',
     },
   });
 
-  const [hasImage, setHasImage] = useState(false);
+  const loading = form.formState.isSubmitting;
 
   const onSubmit = async (values: WebinarFormValues) => {
-    startTransition(async () => {
-      try {
-        setLoading(true);
-        console.log(values);
+    try {
+      console.log();
 
-        form.reset();
-        setFiles(null);
-        setHasImage(false);
-        router.refresh();
-        router.push('/admin/my-webinars');
-        toast({
-          description: (
-            <div className='flex gap-2 items-center'>
-              <CheckCircle className='w-6 h-6 text-green-600' />
-              <span>Webinar created successfully</span>
-            </div>
-          ),
-        });
-      } catch (error: any) {
-        toast({
-          variant: 'destructive',
-          description: error.response.data,
-        });
-      } finally {
-        setLoading(false);
-      }
-    });
+      const url = qs.stringifyUrl({
+        url: `/api/webinar/${params.webinarId}/registration`,
+        query: {
+          webinarId: params.webinarId,
+        },
+      });
+
+      await axios.patch(url, {
+        ...values,
+        number: parseInt(values.number),
+        age: parseInt(values.age),
+      });
+
+      form.reset();
+      router.refresh();
+      router.push('/');
+      toast({
+        description: (
+          <div className='flex gap-2 items-center'>
+            <CheckCircle className='w-6 h-6 text-green-600' />
+            <span>Webinar registration successful</span>
+          </div>
+        ),
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        description: 'Something went wrong. Please try again.',
+      });
+      console.log(error.response.data);
+    }
   };
 
   return (
@@ -230,7 +216,7 @@ const CreateWebinarPage = () => {
 
                   <FormField
                     control={form.control}
-                    name='school'
+                    name='company'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -239,7 +225,7 @@ const CreateWebinarPage = () => {
                         <FormControl>
                           <Input
                             disabled={loading}
-                            placeholder='student'
+                            placeholder='Sorsogon State University'
                             {...field}
                           />
                         </FormControl>

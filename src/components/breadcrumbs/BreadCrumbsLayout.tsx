@@ -34,7 +34,7 @@ const BreadCrumbsLayout = () => {
         label:
           path === '/admin'
             ? 'Home'
-            : path === '/user'
+            : path === 'user'
             ? 'Home'
             : path
                 .split('-')

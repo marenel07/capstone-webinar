@@ -2,10 +2,12 @@ import PageLayout from '@/components/PageLayout';
 import { format } from 'date-fns';
 import ScrollToTop from '@/components/ScrollToTop';
 import HomePage from '@/components/HomePage';
+import getRegisteredWebinar from '@/actions/getRegisteredWebinar';
 import getPostedWebinars from '@/actions/getPostedWebinars';
+import RegisteredWebinarPage from '@/components/RegisteredWebinarPage';
 
-const WebinarsPage = async () => {
-  const initialData = await getPostedWebinars();
+const UserRegisteredWebinarPage = async () => {
+  const initialData = await getRegisteredWebinar();
 
   const formattedData = initialData?.map((item) => ({
     ...item,
@@ -16,7 +18,7 @@ const WebinarsPage = async () => {
     <div className='bg-slate-100 min-h-screen'>
       <PageLayout>
         <div className='lg:pt-[107px]'>
-          <HomePage initialData={formattedData} />
+          <RegisteredWebinarPage initialData={formattedData} />
         </div>
       </PageLayout>
       <ScrollToTop />
@@ -24,4 +26,4 @@ const WebinarsPage = async () => {
   );
 };
 
-export default WebinarsPage;
+export default UserRegisteredWebinarPage;
