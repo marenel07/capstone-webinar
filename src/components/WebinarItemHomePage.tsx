@@ -14,6 +14,7 @@ import { Webinar } from '@/types/types';
 import { Button } from './ui/button';
 import { MoveRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface WebinarItemHomePageProps {
   data: Webinar;
@@ -25,6 +26,7 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
   className,
 }) => {
   const router = useRouter();
+  const session = useSession();
 
   return (
     <Card className={cn('flex flex-col min-h-fit overflow-hidden', className)}>
@@ -65,6 +67,32 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
         </CardContent>
         <CardFooter>
           <div className='flex gap-8 group'>
+            {session?.data?.user.id === data.authorId ? (
+              <Button
+                onClick={() => router.push(`/admin/wbinar/${data.id}/manage`)}
+                className='flex items-center'
+              >
+                <span>Manage Webinar</span>
+                <MoveRight
+                  size={20}
+                  className='lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
+                />
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  router.push(`/user/webinar/registration/${data.id}`)
+                }
+                className='flex items-center'
+              >
+                <span>Register Webinar</span>
+                <MoveRight
+                  size={20}
+                  className='lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
+                />
+              </Button>
+            )}
+
             <Button
               onClick={() =>
                 router.push(`/user/webinar/registration/${data.id}`)
