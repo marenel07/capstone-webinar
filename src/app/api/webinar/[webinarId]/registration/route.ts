@@ -2,16 +2,19 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 
-export async function PATCH(req: Request) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { webinarId: string } }
+) {
   try {
     const body = await req.json();
     const { name, email, number, age, address, occupation, company } = body;
 
-    const { searchParams } = new URL(req.url);
+    // const { searchParams } = new URL(req.url);
 
-    const webinarId = searchParams.get('webinarId');
+    // const webinarId = searchParams.get('webinarId');
 
-    if (!webinarId) {
+    if (!params.webinarId) {
       return new NextResponse('Webinar id is required', { status: 400 });
     }
 
@@ -35,7 +38,7 @@ export async function PATCH(req: Request) {
 
     const webinar = await prisma.webinar.update({
       where: {
-        id: webinarId,
+        id: params.webinarId,
       },
       data: {
         participants: {
