@@ -85,7 +85,7 @@ const CreateWebinarPage = ({ params }: { params: { webinarId: string } }) => {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        description: 'Something went wrong. Please try again.',
+        description: error.response.data,
       });
       console.log(error.response.data);
     }

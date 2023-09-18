@@ -36,6 +36,21 @@ export async function PATCH(
       return new NextResponse('Unauthenticated', { status: 401 });
     }
 
+    const isRegistered = await prisma.webinar.findFirst({
+      where: {
+        id: params.webinarId,
+        participants: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+
+    if (isRegistered) {
+      return new NextResponse('Already registered', { status: 400 });
+    }
+
     const webinar = await prisma.webinar.update({
       where: {
         id: params.webinarId,
