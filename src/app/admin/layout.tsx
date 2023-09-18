@@ -1,5 +1,5 @@
 import getSession from '@/actions/getSession';
-import AdminSidebar from '@/components/navbars/adminsidebar';
+import AdminSidebar from '@/components/navbars/admin-sidebar';
 import Topbar from '@/components/navbars/topbar';
 import BreadCrumbsLayout from '@/components/breadcrumbs/BreadCrumbsLayout';
 
