@@ -1,6 +1,6 @@
 import getSession from '@/actions/getSession';
-import AdminSidebar from '@/components/navbars/AdminSidebar';
-import Topbar from '@/components/navbars/Topbar';
+import AdminSidebar from '@/components/navbars/adminsidebar';
+import Topbar from '@/components/navbars/topbar';
 import BreadCrumbsLayout from '@/components/breadcrumbs/BreadCrumbsLayout';
 
 interface AdminLayoutProps {
