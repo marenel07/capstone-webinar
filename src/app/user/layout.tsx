@@ -1,7 +1,7 @@
 import getSession from '@/actions/getSession';
-import Topbar from '@/components/navbars/topbar';
+import Topbar from '@/components/Navbars/Topbar';
 import BreadCrumbsLayout from '@/components/breadcrumbs/BreadCrumbsLayout';
-import UserSidebar from '@/components/navbars/user-sidebar';
+import UserSidebar from '@/components/Navbars/user-sidebar';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
