@@ -69,13 +69,15 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
           <div className='flex gap-8 group'>
             {session?.data?.user.id === data.authorId ? (
               <Button
-                onClick={() => router.push(`/admin/webinar/${data.id}/manage`)}
+                onClick={() =>
+                  router.push(`/admin/my-webinars/${data.id}/manage`)
+                }
                 className='flex items-center'
               >
                 <span>Manage Webinar</span>
                 <MoveRight
                   size={20}
-                  className='lg:block ml-1 hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
+                  className='lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
                 />
               </Button>
             ) : (
@@ -88,7 +90,7 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
                 <span>Register Webinar</span>
                 <MoveRight
                   size={20}
-                  className='lg:block ml-1 hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
+                  className='lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out'
                 />
               </Button>
             )}
