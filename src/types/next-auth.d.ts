@@ -1,24 +1,24 @@
-import { ROLE } from '@prisma/client';
-import type { Session, User } from 'next-auth';
-import type { JWT } from 'next-auth/jwt';
-import 'next-auth/jwt';
+import { ROLE } from "@prisma/client";
+import type { Session, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import "next-auth/jwt";
 
 type UserId = string;
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
     id: UserId;
+    idNumber: string;
     role: ROLE;
-    isOAuth: boolean;
   }
 }
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: User & {
       id: UserId;
+      idNumber: string;
       role: string;
-      isOAuth: boolean;
     };
   }
 }

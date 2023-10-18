@@ -1,17 +1,17 @@
-import prisma from '@/lib/prismadb';
-import getSession from './getSession';
+import prisma from "@/lib/prismadb";
+import getSession from "./getSession";
 
 const getCurrentUser = async () => {
   try {
     const session = await getSession();
 
-    if (!session?.user?.email) {
+    if (!session?.user?.idNumber) {
       return null;
     }
 
     const currentUser = await prisma.user.findUnique({
       where: {
-        email: session.user.email as string,
+        idNumber: session.user.idNumber as string,
       },
     });
 
@@ -29,7 +29,7 @@ export const getRole = async () => {
   try {
     const session = await getSession();
 
-    if (!session?.user?.email) {
+    if (!session?.user?.idNumber) {
       return null;
     }
 

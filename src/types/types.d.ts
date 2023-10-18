@@ -1,3 +1,5 @@
+import { WEBINAR_STATUS } from "@prisma/client";
+
 export type Webinar = {
   id: string;
   title: string;
@@ -7,6 +9,6 @@ export type Webinar = {
   authorId: string;
   speaker: string;
   description: string;
-  isStarted: boolean;
+  status: WEBINAR_STATUS;
   isPosted: boolean;
 };

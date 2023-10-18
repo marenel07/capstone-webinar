@@ -10,26 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String  @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.String
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -41,29 +21,40 @@ model Session {
 
 model User {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
+  idNumber      String   @unique
+  firstName     String
+  lastName      String
+  name          String
   email         String?   @unique
-  hashedPassword String?
-  emailVerified DateTime?
+  hashedPassword String
   image         String?
-  isVerified    Boolean  @default(false)
+  phone         String?
+  address       String?
+  course       String
+  isEmailVerified    Boolean  @default(false)
   forgotPasswordToken String?
   forgotPasswordTokenExpiry DateTime?
   verificationToken String?
   verificationTokenExpiry DateTime?
   participants  Participant[]
   webinars      Webinar[]
-  accounts      Account[]
   sessions      Session[]
   role          ROLE     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 enum ROLE {
   ADMIN
   USER
+  STAFF
 }
 
-//Webinar model
+enum WEBINAR_STATUS {
+  UPCOMING
+  STARTED
+  ENDED
+}
 
 model Webinar {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -74,7 +65,7 @@ model Webinar {
   time        String
   imageUrl       String
   isPosted    Boolean  @default(false)
-  isStarted  Boolean  @default(false)
+  status     WEBINAR_STATUS @default(UPCOMING)
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String   @db.ObjectId
   createdAt   DateTime @default(now())

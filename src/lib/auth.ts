@@ -1,43 +1,41 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { AuthOptions } from 'next-auth';
-import GithubProvider from 'next-auth/providers/github';
-import GoogleProvider from 'next-auth/providers/google';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-import prisma from '@/lib/prismadb';
+import prisma from "@/lib/prismadb";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'email', type: 'text' },
-        password: { label: 'password', type: 'password' },
+        idNumber: { label: "idNumber", type: "text" },
+        password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Invalid credentials');
+        if (!credentials?.idNumber || !credentials?.password) {
+          throw new Error("Invalid credentials");
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
           where: {
-            email: credentials.email,
+            idNumber: credentials.idNumber,
           },
         });
 
         if (!user || !user?.hashedPassword) {
-          throw new Error('Invalid credentials');
+          throw new Error("Invalid credentials");
+        }
+
+        if (user.hashedPassword === "!def@ult") {
+          if (credentials.password === "!def@ult") {
+            return user;
+          } else {
+            throw new Error("Invalid credentials");
+          }
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -46,7 +44,7 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isCorrectPassword) {
-          throw new Error('Invalid credentials');
+          throw new Error("Invalid credentials");
         }
 
         return user;
@@ -57,11 +55,11 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       if (token && session?.user) {
         session.user.id = token.id;
+        session.user.idNumber = token.idNumber;
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.role = token.role;
-        session.user.isOAuth = token.isOAuth;
       }
       return session;
     },
@@ -69,13 +67,7 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user, account, profile }) {
       const dbUser = await prisma.user.findFirst({
         where: {
-          email: token?.email,
-        },
-      });
-
-      const accountUser = await prisma.account.findFirst({
-        where: {
-          userId: token?.id,
+          idNumber: token?.idNumber,
         },
       });
 
@@ -84,21 +76,12 @@ export const authOptions: AuthOptions = {
         return token;
       }
 
-      if (accountUser) {
-        token.id = dbUser.id;
-        token.name = dbUser.name;
-        token.email = dbUser.email;
-        token.picture = dbUser.image;
-        token.role = dbUser.role;
-        token.isOAuth = accountUser?.type === 'oauth';
-      } else {
-        token.id = dbUser.id;
-        token.name = dbUser.name;
-        token.email = dbUser.email;
-        token.picture = dbUser.image;
-        token.role = dbUser.role;
-        token.isOAuth = false;
-      }
+      token.id = dbUser.id;
+      token.idNumber = dbUser.idNumber;
+      token.name = dbUser.name;
+      token.email = dbUser.email;
+      token.picture = dbUser.image;
+      token.role = dbUser.role;
 
       return token;
     },
@@ -106,13 +89,13 @@ export const authOptions: AuthOptions = {
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     // maxAge: 10 * 60,
   },
   pages: {
-    signIn: '/sign-in',
+    signIn: "/sign-in",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
