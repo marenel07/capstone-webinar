@@ -2,7 +2,7 @@ import PageLayout from "@/components/PageLayout";
 import { format } from "date-fns";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Separator } from "@/components/ui/separator";
-import { DataTable } from "@/components/ui/DataTable";
+import { DataTable } from "@/components/ui/data-table";
 import prisma from "@/lib/prismadb";
 import { columns } from "./components/columns";
 import ManageUsersHeader from "./components/ManageUsersHeader";

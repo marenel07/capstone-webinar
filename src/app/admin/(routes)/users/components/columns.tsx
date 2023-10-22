@@ -45,7 +45,6 @@ export const columns: ColumnDef<UserColumn>[] = [
       );
     },
   },
-
   {
     accessorKey: "phone",
     header: ({ column }) => {

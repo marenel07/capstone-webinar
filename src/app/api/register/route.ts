@@ -1,48 +1,39 @@
-import bcrypt from 'bcrypt';
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prismadb';
-import { sendEmail } from '@/lib/mailer';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prismadb";
+import { revalidatePath } from "next/cache";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const path = "/admin/users";
+    const user = await getCurrentUser();
 
-    const { name, email, password } = body;
+    const { data } = body;
 
-    if (!name || !email || !password) {
-      return new NextResponse('Missing information', { status: 400 });
+    if (user?.role !== "ADMIN") {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (userExists) {
-      return new NextResponse('User already exists', { status: 400 });
+    if (!data) {
+      return new NextResponse("Bad request", { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        hashedPassword,
-      },
+    const response = await prisma.user.createMany({
+      data: data,
     });
 
     //send email verification
-    await sendEmail({
-      email,
-      emailType: 'VERIFY',
-      userId: user.id,
-    });
+    // await sendEmail({
+    //   email,
+    //   emailType: 'VERIFY',
+    //   userId: user.id,
+    // });
+    revalidatePath(path);
 
-    return NextResponse.json(user);
+    return NextResponse.json(response);
   } catch (error: any) {
-    console.error(error, 'REGISTRATION_ERROR');
-    return new NextResponse('Internal server error', { status: 500 });
+    console.error(error, "REGISTRATION_USERS_ERROR");
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

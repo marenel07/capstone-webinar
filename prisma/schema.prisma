@@ -25,12 +25,14 @@ model User {
   firstName     String
   lastName      String
   name          String
-  email         String?   @unique
-  hashedPassword String
+  email         String?   
+  password String @default("!def@ult")
   image         String?
   phone         String?
   address       String?
   course       String
+  year          String
+  department   String
   isEmailVerified    Boolean  @default(false)
   forgotPasswordToken String?
   forgotPasswordTokenExpiry DateTime?

@@ -51,7 +51,11 @@ const SignInForm = () => {
     if (session?.status === "authenticated") {
       router.push("/");
     }
-  }, [session?.status, router]);
+
+    if (session?.data?.user.role === "ADMIN") {
+      router.push("/admin/users");
+    }
+  }, [router, session]);
 
   const onSubmit = async (values: FormValues) => {
     setLoading(true);

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { ParticipantColumn } from './Columns';
+import { ParticipantColumn } from "./Columns";
 
-import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,12 +11,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useParams, useRouter } from 'next/navigation';
-import { useToast } from '@/components/ui/use-toast';
-import axios from 'axios';
-import { useState } from 'react';
-import AlertModal from '@/components/modals/AlertModal';
+} from "@/components/ui/dropdown-menu";
+import { useParams, useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
+import { useState } from "react";
+import AlertModal from "@/components/modals/AlertModal";
 
 interface CellActionProps {
   data: ParticipantColumn;
@@ -34,8 +34,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
     toast({
-      title: 'Copied',
-      description: 'Product ID copied to clipboard',
+      title: "Copied",
+      description: "Product ID copied to clipboard",
     });
   };
 
@@ -44,15 +44,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       setLoading(true);
       await axios.delete(`/api/${params.storeId}/products/${id}`);
       toast({
-        title: 'Deleted',
-        description: 'Product deleted successfully',
+        title: "Deleted",
+        description: "Product deleted successfully",
       });
       router.refresh();
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Something went wrong',
-        variant: 'destructive',
+        title: "Error",
+        description: "Something went wrong",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -70,15 +70,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='h-8 w-8 p-0'>
-            <span className='sr-only'>Open menu</span>
-            <MoreHorizontal className='h-4 w-4' />
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
+        <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)} disabled={loading}>
-            <Copy className='h-4 w-4 mr-2' />
+            <Copy className="h-4 w-4 mr-2" />
             Copy ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -88,16 +88,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             }
             disabled={loading}
           >
-            <Edit className='h-4 w-4 mr-2' />
+            <Edit className="h-4 w-4 mr-2" />
             Update
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className='text-destructive'
+            className="text-destructive"
             onClick={() => setOpen(true)}
             disabled={loading}
           >
-            <Trash className='h-4 w-4 mr-2' />
+            <Trash className="h-4 w-4 mr-2" />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

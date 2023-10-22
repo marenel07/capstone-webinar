@@ -1,15 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 
 import { Toaster } from "sonner";
 import AuthProvider from "@/providers/AuthProvider";
-
-const poppins = Poppins({
-  subsets: ["devanagari"],
-  weight: ["400", "600"],
-  fallback: ["system-ui", "arial"],
-});
+import ModalProvider from "@/providers/ModalProvider";
 
 export const metadata: Metadata = {
   title: "SorSU-BC Webinar Mangaement System",
@@ -23,9 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body>
         <AuthProvider>
           <Toaster richColors />
+          <ModalProvider />
           {children}
         </AuthProvider>
       </body>

@@ -86,7 +86,7 @@ const AdminSidebar = () => {
                 activeLabel="users"
               />
 
-              <SidebarItem
+              {/* <SidebarItem
                 active={active}
                 href="/admin/my-webinars"
                 icon={Webcam}
@@ -100,7 +100,7 @@ const AdminSidebar = () => {
                 icon={Videotape}
                 label="Recordings"
                 activeLabel="recordings"
-              />
+              /> */}
             </ul>
           </div>
         </div>

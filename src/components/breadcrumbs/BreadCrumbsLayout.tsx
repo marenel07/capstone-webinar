@@ -18,7 +18,6 @@ const BreadCrumbsLayout = () => {
     let pathArray = pathWithoutQuery.split("/");
     pathArray.shift();
 
-    // remove admin from path array if it is the first element in the array or if it is the only element in the array
     if (pathArray.length > 1 && pathArray[0] === "admin") {
       pathArray.shift();
     } else if (pathArray.length === 1 && pathArray[0] === "admin") {
