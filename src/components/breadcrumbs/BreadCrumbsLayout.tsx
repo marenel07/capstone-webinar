@@ -27,7 +27,18 @@ const BreadCrumbsLayout = () => {
     pathArray = pathArray.filter((path) => path !== "");
 
     const breadcrumbs = pathArray.map((path, index) => {
-      const href = "/admin/" + pathArray.slice(0, index + 1).join("/");
+      let href = "";
+
+      if (path.startsWith("/admin")) {
+        href = "/admin" + pathArray.slice(0, index + 1).join("/");
+      } else if (path.startsWith("/user")) {
+        href = "/user" + pathArray.slice(0, index + 1).join("/");
+      } else if (path.startsWith("/staff")) {
+        href = "/staff" + pathArray.slice(0, index + 1).join("/");
+      } else {
+        href = "/" + pathArray.slice(0, index + 1).join("/");
+      }
+      // const href = "/admin/" + pathArray.slice(0, index + 1).join("/");
       return {
         href,
         label:

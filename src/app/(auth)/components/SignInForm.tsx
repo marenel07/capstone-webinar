@@ -52,7 +52,10 @@ const SignInForm = () => {
       router.push("/");
     }
 
-    if (session?.data?.user.role === "ADMIN") {
+    if (
+      session?.status === "authenticated" &&
+      session?.data?.user?.role === "ADMIN"
+    ) {
       router.push("/admin/users");
     }
   }, [router, session]);

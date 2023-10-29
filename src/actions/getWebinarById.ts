@@ -1,6 +1,6 @@
-import { cache } from 'react';
-import getCurrentUser from './getCurrentUser';
-import prisma from '@/lib/prismadb';
+import { cache } from "react";
+import getCurrentUser from "./getCurrentUser";
+import prisma from "@/lib/prismadb";
 
 const getWebinarById = cache(async (webinarId: string) => {
   try {
@@ -13,7 +13,7 @@ const getWebinarById = cache(async (webinarId: string) => {
       return null;
     }
 
-    const webinar = await prisma.webinar.findMany({
+    const webinar = await prisma.webinar.findUnique({
       where: {
         id: webinarId,
       },
@@ -28,7 +28,7 @@ const getWebinarById = cache(async (webinarId: string) => {
 
     return webinar;
   } catch (error) {
-    console.log('WEBINAR_ID_ERROR: ', error);
+    console.log("WEBINAR_ID_ERROR: ", error);
     return null;
   }
 });

@@ -20,7 +20,7 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
           where: {
             idNumber: credentials.idNumber,
           },
@@ -52,8 +52,8 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
-      if (token && session?.user) {
+    async session({ session, token, user }) {
+      if (token) {
         session.user.id = token.id;
         session.user.idNumber = token.idNumber;
         session.user.name = token.name;
@@ -65,23 +65,14 @@ export const authOptions: AuthOptions = {
     },
 
     async jwt({ token, user, account, profile }) {
-      const dbUser = await prisma.user.findFirst({
-        where: {
-          idNumber: token?.idNumber,
-        },
-      });
-
-      if (!dbUser) {
-        token.id = user!.id;
-        return token;
+      if (user) {
+        token.id = user.id;
+        token.idNumber = user.idNumber;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+        token.role = user.role;
       }
-
-      token.id = dbUser.id;
-      token.idNumber = dbUser.idNumber;
-      token.name = dbUser.name;
-      token.email = dbUser.email;
-      token.picture = dbUser.image;
-      token.role = dbUser.role;
 
       return token;
     },

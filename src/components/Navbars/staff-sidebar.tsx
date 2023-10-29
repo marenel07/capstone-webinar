@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import SidebarItem from "./SidebarItem";
 
-const AdminSidebar = () => {
+const StaffSidebar = () => {
   const pathname = usePathname();
   const route = pathname.split("/")[2];
   const activeRoute = route === undefined ? "home" : route;
@@ -63,6 +63,14 @@ const AdminSidebar = () => {
         </div>
 
         <div className="flex flex-col gap-10">
+          <SidebarItem
+            active={active}
+            href="/admin"
+            icon={HomeIcon}
+            label="Home"
+            activeLabel="home"
+          />
+
           <div className="flex flex-col gap-4">
             <div
               className={`w-full flex items-center ${
@@ -80,15 +88,15 @@ const AdminSidebar = () => {
             <ul className="flex flex-col gap-2">
               <SidebarItem
                 active={active}
-                href="/admin/users"
-                icon={Users}
-                label="Users"
-                activeLabel="users"
+                href="/staff/webinar"
+                icon={Video}
+                label="Webinar"
+                activeLabel="webinar"
               />
 
               <SidebarItem
                 active={active}
-                href="/admin/my-webinars"
+                href="/staff/my-webinars"
                 icon={Webcam}
                 label="My Webinars"
                 activeLabel="my-webinars"
@@ -96,7 +104,7 @@ const AdminSidebar = () => {
 
               <SidebarItem
                 active={active}
-                href="/admin/recordings"
+                href="/staff/recordings"
                 icon={Videotape}
                 label="Recordings"
                 activeLabel="recordings"
@@ -109,4 +117,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default StaffSidebar;

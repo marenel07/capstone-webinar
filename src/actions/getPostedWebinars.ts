@@ -1,6 +1,6 @@
-import { cache } from 'react';
-import getCurrentUser from './getCurrentUser';
-import prisma from '@/lib/prismadb';
+import { cache } from "react";
+import getCurrentUser from "./getCurrentUser";
+import prisma from "@/lib/prismadb";
 
 const getPostedWebinars = cache(async () => {
   try {
@@ -11,7 +11,10 @@ const getPostedWebinars = cache(async () => {
 
     const webinars = await prisma.webinar.findMany({
       where: {
-        isPosted: true,
+        departmentPost: "ALL",
+      },
+      include: {
+        participants: true,
       },
     });
 
@@ -21,7 +24,7 @@ const getPostedWebinars = cache(async () => {
 
     return webinars;
   } catch (error) {
-    console.log('WEBINARS ERROR: ', error);
+    console.log("WEBINARS ERROR: ", error);
     return null;
   }
 });

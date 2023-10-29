@@ -22,6 +22,7 @@ import {
 import { Button } from "../ui/button";
 import axios from "axios";
 import { toast } from "sonner";
+import bcrypt from "bcrypt";
 
 interface AddSingleUserFormProps {
   onClose: () => void;
@@ -56,6 +57,7 @@ const AddSingleUserForm = ({ onClose }: AddSingleUserFormProps) => {
   const onSubmit = async (values: AddUserFormValues) => {
     try {
       const name = `${values.firstName} ${values.lastName}`;
+
       await axios.post("/api/register/single", { ...values, name });
       toast.success("User added successfully");
       form.reset();

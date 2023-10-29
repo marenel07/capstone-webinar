@@ -7,8 +7,9 @@ import {
   formatChatMessageLinks,
 } from "@livekit/components-react";
 import "@livekit/components-styles";
-import { Loader2 } from "lucide-react";
+import { Disc2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 interface MediaRoomProps {
   chatId: string;
@@ -20,6 +21,14 @@ interface MediaRoomProps {
 export const MediaRoom = ({ chatId, video, audio, name }: MediaRoomProps) => {
   const [token, setToken] = useState("");
   const router = useRouter();
+
+  async function onRecord() {
+    try {
+      await axios.post("/api/livekit/record", { chatId });
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -56,6 +65,9 @@ export const MediaRoom = ({ chatId, video, audio, name }: MediaRoomProps) => {
       style={{ height: "100vh" }}
       onDisconnected={() => router.back()}
     >
+      <div className="w-full p-2 flex items-center  justify-end">
+        <Disc2 onClick={onRecord} size={20} />
+      </div>
       <VideoConference chatMessageFormatter={formatChatMessageLinks} />
     </LiveKitRoom>
   );

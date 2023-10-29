@@ -58,6 +58,13 @@ enum WEBINAR_STATUS {
   ENDED
 }
 
+enum DEPARTMENT_POST {
+  UNPOST
+  ALL
+  ICT
+  BME
+}
+
 model Webinar {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -68,6 +75,7 @@ model Webinar {
   imageUrl       String
   isPosted    Boolean  @default(false)
   status     WEBINAR_STATUS @default(UPCOMING)
+  departmentPost DEPARTMENT_POST @default(UNPOST)
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String   @db.ObjectId
   createdAt   DateTime @default(now())
@@ -81,13 +89,8 @@ model Participant {
   webinarId String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @db.ObjectId
-  name      String?
-  email     String?
-  number    Int?
-  age       Int?
-  address   String?
-  occupation String?
-  company   String?
+  evaluated Boolean  @default(false)
+  certificateUrl String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

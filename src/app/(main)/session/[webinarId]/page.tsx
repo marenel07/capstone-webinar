@@ -1,7 +1,7 @@
-import getCurrentUser from '@/actions/getCurrentUser';
-import { MediaRoom } from '@/components/MediaRoom';
-import prisma from '@/lib/prismadb';
-import { redirect } from 'next/navigation';
+import getCurrentUser from "@/actions/getCurrentUser";
+import { MediaRoom } from "@/components/MediaRoom";
+import prisma from "@/lib/prismadb";
+import { redirect } from "next/navigation";
 
 interface RoomPageProps {
   params: {
@@ -26,11 +26,11 @@ const RoomPage = async ({ params }: RoomPageProps) => {
   const user = await getCurrentUser();
 
   if (!webinar) {
-    return redirect('/');
+    return redirect("/");
   }
 
   if (!user) {
-    return redirect('/sign-in');
+    return redirect("/sign-in");
   }
 
   const isParticipant = webinar.participants.some(
@@ -38,7 +38,7 @@ const RoomPage = async ({ params }: RoomPageProps) => {
   );
 
   if (!isParticipant) {
-    return redirect(`/user/webinar/registration/${params.webinarId}`);
+    return redirect("/");
   }
 
   return (

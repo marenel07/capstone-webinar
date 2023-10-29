@@ -1,6 +1,6 @@
-import getCurrentUser from '@/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prismadb';
+import getCurrentUser from "@/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prismadb";
 
 export async function PATCH(
   req: Request,
@@ -8,32 +8,24 @@ export async function PATCH(
 ) {
   try {
     const body = await req.json();
-    const { name, email, number, age, address, occupation, company } = body;
+    const { userId } = body;
 
     // const { searchParams } = new URL(req.url);
 
     // const webinarId = searchParams.get('webinarId');
 
     if (!params.webinarId) {
-      return new NextResponse('Webinar id is required', { status: 400 });
+      return new NextResponse("Webinar id is required", { status: 400 });
     }
 
-    if (
-      !name ||
-      !email ||
-      !number ||
-      !age ||
-      !address ||
-      !occupation ||
-      !company
-    ) {
-      return new NextResponse('All fields are required', { status: 400 });
+    if (!userId) {
+      return new NextResponse("All fields are required", { status: 400 });
     }
 
     const user = await getCurrentUser();
 
     if (!user) {
-      return new NextResponse('Unauthenticated', { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     const isRegistered = await prisma.webinar.findFirst({
@@ -48,7 +40,7 @@ export async function PATCH(
     });
 
     if (isRegistered) {
-      return new NextResponse('Already registered', { status: 400 });
+      return new NextResponse("Already registered", { status: 400 });
     }
 
     const webinar = await prisma.webinar.update({
@@ -59,14 +51,7 @@ export async function PATCH(
         participants: {
           create: [
             {
-              userId: user.id,
-              name,
-              email,
-              number,
-              age,
-              address,
-              occupation,
-              company,
+              userId,
             },
           ],
         },
@@ -75,7 +60,7 @@ export async function PATCH(
 
     return NextResponse.json(webinar);
   } catch (error) {
-    console.log('[WWEBINAR_REGISTRATION_PATCH]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    console.log("[WWEBINAR_REGISTRATION_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

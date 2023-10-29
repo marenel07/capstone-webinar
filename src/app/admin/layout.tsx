@@ -1,7 +1,7 @@
-import getSession from '@/actions/getSession';
-import AdminSidebar from '@/components/Navbars/admin-sidebar';
-import Topbar from '@/components/Navbars/Topbar';
-import BreadCrumbsLayout from '@/components/breadcrumbs/BreadCrumbsLayout';
+import getSession from "@/actions/getSession";
+import AdminSidebar from "@/components/Navbars/admin-sidebar";
+import Topbar from "@/components/Navbars/Topbar";
+import BreadCrumbsLayout from "@/components/breadcrumbs/BreadCrumbsLayout";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -9,9 +9,10 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = async ({ children }) => {
   const session = await getSession();
+  // console.log(session?.user.idNumber);
 
   return (
-    <div className='h-full'>
+    <div className="h-full">
       <AdminSidebar />
       <Topbar session={session} />
       <BreadCrumbsLayout />

@@ -13,6 +13,7 @@ import Papa from "papaparse";
 import { FileWithPreview } from "@/types";
 import UserAddTable from "./components/UserAddTable";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const WebinarsPage = () => {
   const [file, setFile] = useState<FileWithPreview[] | null>(null);
@@ -21,6 +22,8 @@ const WebinarsPage = () => {
   const [open, setOpen] = useState(false);
 
   const csv = file?.[0]?.preview;
+
+  const router = useRouter();
 
   useEffect(() => {
     if (csv) {
@@ -76,6 +79,7 @@ const WebinarsPage = () => {
 
       await axios.post("/api/register", { data });
       toast.success("Users added successfully");
+      router.refresh();
       setUsers([]);
     } catch (error: any) {
       toast.error(error.message ?? "Something went wrong");

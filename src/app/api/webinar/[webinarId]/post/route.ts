@@ -1,20 +1,27 @@
-import getCurrentUser from '@/actions/getCurrentUser';
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prismadb';
+import getCurrentUser from "@/actions/getCurrentUser";
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prismadb";
 
 export async function PATCH(
   req: Request,
   { params }: { params: { webinarId: string } }
 ) {
   try {
+    const body = await req.json();
+    const { department } = body;
+
     if (!params.webinarId) {
-      return new NextResponse('Webinar id is required', { status: 400 });
+      return new NextResponse("Webinar id is required", { status: 400 });
+    }
+
+    if (!department) {
+      return new NextResponse("Department is required", { status: 400 });
     }
 
     const user = await getCurrentUser();
 
     if (!user) {
-      return new NextResponse('Unauthenticated', { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     const webinar = await prisma.webinar.update({
@@ -23,13 +30,13 @@ export async function PATCH(
         authorId: user.id,
       },
       data: {
-        isPosted: true,
+        departmentPost: department,
       },
     });
 
     return NextResponse.json(webinar);
   } catch (error) {
-    console.log('[WWEBINAR_POST]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    console.log("[WWEBINAR_POST]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
