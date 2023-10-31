@@ -27,7 +27,7 @@ interface WebinarItemHomePageProps {
   userId: string | undefined;
 }
 
-const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
+const WebinarEventItem: React.FC<WebinarItemHomePageProps> = ({
   data,
   className,
   userId,
@@ -77,9 +77,7 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
         </CardHeader>
 
         <CardContent>
-          <p className="text-sm text-neutral-500">{data.description}</p>
-
-          <div className="flex flex-col items-start mt-4">
+          <div className="flex flex-col items-start">
             <div className="flex items-center gap-2">
               <span className="text-sm text-neutral-700">When:</span>
               <span className="text-sm text-neutral-500">
@@ -140,4 +138,4 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
   );
 };
 
-export default WebinarItemHomePage;
+export default WebinarEventItem;

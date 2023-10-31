@@ -18,17 +18,16 @@ const BreadCrumbs = ({ items }: BreadcrumbsProps) => {
         const isLastItem = i === items.length - 1;
         if (!isLastItem) {
           return (
-            <>
+            <div key={i}>
               <Link
                 href={crumb.href}
-                key={i}
                 className="text-neutral-500 hover:text-neutral-400 hover:underline cursor-pointer"
               >
                 {crumb.label}
               </Link>
               {/* separator */}
               <span> &gt; </span>
-            </>
+            </div>
           );
         } else {
           return crumb.label;

@@ -60,7 +60,7 @@ const BreadCrumbsLayout = () => {
 
   return (
     <PageLayout
-      className={`lg:fixed lg:top-[57px] mt-[57px] lg:mt-0  w-full ${
+      className={`lg:fixed lg:top-[57px] mt-[57px] lg:mt-0  w-full hidden md:block ${
         isCollapsed ? "lg:left-[74px]" : "lg:left-[237px]"
       } border-b border-neutral-200 shadow-lg lg:z-40 lg:left-0`}
     >

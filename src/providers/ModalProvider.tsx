@@ -1,5 +1,6 @@
 "use client";
 
+import { StaffMobileSidebar } from "@/components/Navbars/staff-mobile-sidebar";
 import AddSingleUser from "@/components/modals/AddSingleUser";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ const ModalProvider = () => {
   return (
     <>
       <AddSingleUser />
+      <StaffMobileSidebar />
     </>
   );
 };

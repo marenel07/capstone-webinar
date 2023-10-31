@@ -79,7 +79,7 @@ const EditWebinarForm = ({ data }: EditWebinarFormProps) => {
           src={file.preview}
           alt="preview"
           fill
-          loading="lazy"
+          sizes="100%"
           className="md:aspect-[2.4/1] object-cover object-center"
         />
       ))
@@ -159,7 +159,7 @@ const EditWebinarForm = ({ data }: EditWebinarFormProps) => {
       <div className="flex flex-col space-y-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-2 gap-8 m-0">
+            <div className="md:grid md:grid-cols-2 gap-8 m-0 flex flex-col">
               <FormField
                 control={form.control}
                 name="title"
@@ -230,7 +230,7 @@ const EditWebinarForm = ({ data }: EditWebinarFormProps) => {
                 </FormItem>
               </div>
 
-              <div className="w-full md:aspect-[2.4/1] bg-cover relative group">
+              <div className="w-full aspect-video bg-cover relative group">
                 {preview && (
                   <div className="col-span-2">
                     <div className="flex flex-col space-y-2">

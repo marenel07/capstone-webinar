@@ -1,10 +1,10 @@
 import { cache } from "react";
 import getCurrentUser from "./getCurrentUser";
 import prisma from "@/lib/prismadb";
-import { DEPARTMENT_POST } from "@prisma/client";
+import { DEPARTMENT_POST, WEBINAR_STATUS } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-const getPostedWebinarsByDepartment = cache(async () => {
+const getPostedWebinarsByStatus = cache(async (status: WEBINAR_STATUS) => {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
@@ -19,6 +19,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
           departmentPost: {
             not: "UNPOST",
           },
+          status: status,
         },
         include: {
           participants: true,
@@ -28,6 +29,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
       webinars = await prisma.webinar.findMany({
         where: {
           departmentPost: currentUser?.department as DEPARTMENT_POST,
+          status: status,
         },
         include: {
           participants: true,
@@ -48,4 +50,4 @@ const getPostedWebinarsByDepartment = cache(async () => {
   }
 });
 
-export default getPostedWebinarsByDepartment;
+export default getPostedWebinarsByStatus;

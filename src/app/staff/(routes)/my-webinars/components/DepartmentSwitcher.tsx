@@ -84,7 +84,9 @@ export default function DepartmentSwitcher({
             "Unposted"
           ) : (
             <>
-              {department ? <span className="mr-1">Posted to</span> : null}
+              {department ? (
+                <span className="mr-1 hidden md:block">Posted to</span>
+              ) : null}
               <p className="text-ellipsis">
                 {" "}
                 {department || "Select department to post"}

@@ -81,12 +81,14 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
 
   return (
     <Card className={cn("flex flex-col min-h-fit overflow-hidden", className)}>
-      <div className="flex relative">
+      <div className="relative w-full aspect-video rounded-md overflow-hidden">
         <Zoom>
           <Image
             alt={data?.title as string}
             src={data?.imageUrl as string}
-            className="object-cover w-[800px] h-[350px]"
+            className="object-cover"
+            placeholder="blur"
+            blurDataURL={data?.imageUrl}
             width={800}
             height={350}
           />

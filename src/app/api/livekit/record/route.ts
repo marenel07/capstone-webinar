@@ -1,4 +1,8 @@
-import { EgressClient, EncodedFileType } from "livekit-server-sdk";
+import {
+  EgressClient,
+  EncodedFileType,
+  EncodingOptionsPreset,
+} from "livekit-server-sdk";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -24,15 +28,16 @@ export async function POST(req: Request) {
       },
     };
 
+    const encodingOption = EncodingOptionsPreset.H264_1080P_30;
+
     const info = await egressClient.startRoomCompositeEgress(chatId, output, {
       layout: "speaker",
-      // uncomment to use your own templates
-      // customBaseUrl: 'https://my-template-url.com',
+      encodingOptions: encodingOption,
     });
 
-    const file = info.status;
-    console.log(file);
-    return NextResponse.json(info);
+    const egressId = info.egressId;
+
+    return NextResponse.json(egressId, { status: 200 });
   } catch (error) {
     console.log(error, "RECORD_POST");
     return new NextResponse("Internal server error", { status: 500 });

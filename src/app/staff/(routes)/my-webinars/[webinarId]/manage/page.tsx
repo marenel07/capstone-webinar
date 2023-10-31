@@ -20,8 +20,6 @@ type ParticipantWithUser = Participant & {
 };
 
 const ManageWebinar = async ({ params }: ManageWebinarProps) => {
-  const data = (await getWebinarById(params.webinarId)) as any;
-
   const webinar = await prisma.webinar.findFirst({
     where: {
       id: params.webinarId,
@@ -64,7 +62,7 @@ const ManageWebinar = async ({ params }: ManageWebinarProps) => {
   return (
     <div className="bg-slate-100 min-h-screen">
       <PageLayout>
-        <div className="container mx-auto pt-[107px]">
+        <div className="container mx-auto pt-[57px] md:pt-[107px]">
           <div className="flex flex-col space-y-4 py-6">
             <WebinarHeader
               webinarId={params.webinarId}

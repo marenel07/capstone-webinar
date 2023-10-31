@@ -65,7 +65,7 @@ const StaffSidebar = () => {
         <div className="flex flex-col gap-10">
           <SidebarItem
             active={active}
-            href="/admin"
+            href="/staff"
             icon={HomeIcon}
             label="Home"
             activeLabel="home"
@@ -88,10 +88,10 @@ const StaffSidebar = () => {
             <ul className="flex flex-col gap-2">
               <SidebarItem
                 active={active}
-                href="/staff/webinar"
+                href="/staff/webinars"
                 icon={Video}
-                label="Webinar"
-                activeLabel="webinar"
+                label="Webinars"
+                activeLabel="webinars"
               />
 
               <SidebarItem

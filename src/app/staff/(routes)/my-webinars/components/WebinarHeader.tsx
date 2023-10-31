@@ -12,6 +12,7 @@ import StatusSwitcher from "./StatusSwitcher";
 import DepartmentSwitcher from "./DepartmentSwitcher";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
+import AlertModal from "@/components/modals/AlertModal";
 
 interface WebinarHeaderProps {
   webinarId: string;
@@ -26,6 +27,7 @@ const WebinarHeader = ({
 }: WebinarHeaderProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const onDelete = async () => {
     try {
@@ -40,8 +42,15 @@ const WebinarHeader = ({
       setLoading(false);
     }
   };
+
   return (
-    <div className="flex justify-between items-start">
+    <div className="flex flex-col space-y-4 md:flex-row justify-between items-start">
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <Heading title="Manage Webinar" description="Manage your webinar here." />
       <div className="flex gap-3">
         <StatusSwitcher status={status} webinarId={webinarId} />

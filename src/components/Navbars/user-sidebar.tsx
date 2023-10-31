@@ -87,10 +87,17 @@ const UserSidebar = () => {
             <ul className='flex flex-col gap-2'>
               <SidebarItem
                 active={active}
-                href='/user/webinar'
+                href='/user/webinars'
                 icon={Video}
-                label='Webinar'
-                activeLabel='webinar'
+                label='Webinars'
+                activeLabel='webinars'
+              />
+              <SidebarItem
+                active={active}
+                href='/user/registered-webinar'
+                icon={Video}
+                label='Registered Webinar'
+                activeLabel='registered-webinar'
               />
 
               <SidebarItem
