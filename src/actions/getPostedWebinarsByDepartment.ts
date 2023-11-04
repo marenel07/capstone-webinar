@@ -22,6 +22,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
         },
         include: {
           participants: true,
+          author: true,
         },
       });
     } else {
@@ -31,6 +32,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
         },
         include: {
           participants: true,
+          author: true,
         },
       });
     }

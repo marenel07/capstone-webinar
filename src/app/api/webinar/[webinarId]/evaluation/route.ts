@@ -2,7 +2,8 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import { certificateGenerator } from "@/lib/certificateGenerator";
-import { utapi } from "@/lib/uploadthing";
+import { revalidatePath } from "next/cache";
+import { utapi } from "@/server/uploadthing";
 
 export async function PATCH(
   req: Request,
@@ -25,12 +26,6 @@ export async function PATCH(
 
     const user = await getCurrentUser();
 
-    const currentWebinar = await prisma.webinar.findUnique({
-      where: {
-        id: params.webinarId,
-      },
-    });
-
     if (!user) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
@@ -40,6 +35,7 @@ export async function PATCH(
         id: params.webinarId,
         participants: {
           some: {
+            userId: user.id,
             evaluated: true,
           },
         },
@@ -61,7 +57,7 @@ export async function PATCH(
               userId,
             },
             data: {
-              evaluated: true,
+              evaluated: false,
             },
           },
         },
@@ -87,8 +83,9 @@ export async function PATCH(
       },
     });
 
+    revalidatePath("/");
+
     return NextResponse.json(webinar);
-    return null;
   } catch (error) {
     console.log("[WWEBINAR_REGISTRATION_PATCH]", error);
     return new NextResponse("Internal error", { status: 500 });

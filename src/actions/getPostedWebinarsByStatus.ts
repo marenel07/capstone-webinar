@@ -23,6 +23,7 @@ const getPostedWebinarsByStatus = cache(async (status: WEBINAR_STATUS) => {
         },
         include: {
           participants: true,
+          author: true,
         },
       });
     } else {
@@ -33,6 +34,7 @@ const getPostedWebinarsByStatus = cache(async (status: WEBINAR_STATUS) => {
         },
         include: {
           participants: true,
+          author: true,
         },
       });
     }

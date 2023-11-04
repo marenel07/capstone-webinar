@@ -22,7 +22,10 @@ import { certificateGenerator } from "@/lib/certificateGenerator";
 import { generateReactHelpers } from "@uploadthing/react/hooks";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 
-type WebinarWithParticipants = Webinar & { participants: Participant[] };
+type WebinarWithParticipants = Webinar & {
+  participants: Participant[];
+  author: { name: string };
+};
 interface WebinarItemHomePageProps {
   data: WebinarWithParticipants | undefined;
   className?: string;
@@ -51,9 +54,16 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
   const { useUploadThing } = generateReactHelpers<OurFileRouter>();
   const { isUploading, startUpload } = useUploadThing("pdfUploader");
 
+  console.log(userName);
+
   const onSubmit = async () => {
     try {
-      const file = await certificateGenerator(userName as string);
+      const file = await certificateGenerator({
+        userName: userName as string,
+        title: data?.title as string,
+        date: data?.date as string,
+        speaker: data?.speaker as string,
+      });
       const certificate = file
         ? await startUpload(file).then((res) => {
             const formattedImages = res?.map((image) => ({
@@ -68,10 +78,10 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
 
       console.log(certificate);
 
-      await axios.patch(`/api/webinar/${data?.id}/evaluation`, {
-        userId,
-        certificate,
-      });
+      // await axios.patch(`/api/webinar/${data?.id}/evaluation`, {
+      //   userId,
+      //   certificate,
+      // });
       toast.success("Evaluated Successfully");
       router.refresh();
     } catch (error) {
@@ -116,6 +126,12 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
               <span className="text-sm text-neutral-500">Speaker :</span>
               <span className="text-sm text-neutral-700">{data?.speaker}</span>
             </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-neutral-500">Staff :</span>
+              <span className="text-sm text-neutral-700">
+                {data?.author.name}
+              </span>
+            </div>
           </div>
         </CardContent>
         <CardFooter>
@@ -159,6 +175,7 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
                 🎉 Connect, learn, and grow at our upcoming gathering!
               </p>
             )}
+            <Button onClick={onSubmit}>Generate certificate</Button>
           </div>
         </CardFooter>
       </div>

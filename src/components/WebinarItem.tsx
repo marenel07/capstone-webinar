@@ -18,8 +18,12 @@ import { Suspense, useState } from "react";
 import { useToast } from "./ui/use-toast";
 import axios from "axios";
 
+type WebinarWithAuthor = Webinar & {
+  author: { name: string };
+};
+
 interface WebinarItemProps {
-  data: Webinar;
+  data: WebinarWithAuthor;
   className?: string;
 }
 
@@ -85,6 +89,12 @@ const WebinarItem: React.FC<WebinarItemProps> = ({ data, className }) => {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-neutral-500">Speaker :</span>
                 <span className="text-sm text-neutral-700">{data.speaker}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-neutral-500">Staff :</span>
+                <span className="text-sm text-neutral-700">
+                  {data.author.name}
+                </span>
               </div>
             </div>
           </CardContent>

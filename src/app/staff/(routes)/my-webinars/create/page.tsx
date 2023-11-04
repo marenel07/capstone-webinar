@@ -20,7 +20,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { CalendarIcon, CheckCircle, PlusCircle, X } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 
 import { generateReactHelpers } from "@uploadthing/react/hooks";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
@@ -54,13 +54,11 @@ const formSchema = z.object({
 type WebinarFormValues = z.infer<typeof formSchema>;
 
 const CreateWebinarPage = () => {
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const [files, setFiles] = useState<FileWithPreview[] | null>(null);
   const { useUploadThing } = generateReactHelpers<OurFileRouter>();
   const { isUploading, startUpload } = useUploadThing("imageUploader");
-  const [isPending, startTransition] = useTransition();
 
   const preview = files?.map((file) => (
     <Image
@@ -68,6 +66,7 @@ const CreateWebinarPage = () => {
       src={file.preview}
       alt="preview"
       fill
+      sizes="100%"
       className="md:aspect-[2.4/1] object-cover object-center"
     />
   ));
@@ -85,52 +84,48 @@ const CreateWebinarPage = () => {
   });
 
   const [hasImage, setHasImage] = useState(false);
+  const loading = form.formState.isSubmitting;
 
   const onSubmit = async (values: WebinarFormValues) => {
-    startTransition(async () => {
-      try {
-        setLoading(true);
-        if (values.images) {
-          setHasImage(true);
-        }
-
-        const imageUrl = isArrayOfFile(values.images)
-          ? await startUpload(values.images).then((res) => {
-              const formattedImages = res?.map((image) => ({
-                id: image.key,
-                name: image.key.split("_")[1] ?? image.key,
-                url: image.url,
-              }));
-              return formattedImages?.[0]?.url
-                ? (formattedImages[0].url as string)
-                : null;
-            })
-          : null;
-
-        await axios.post("/api/webinar", {
-          ...values,
-          imageUrl,
-        });
-
-        form.reset();
-        setFiles(null);
-        setHasImage(false);
-        router.refresh();
-        router.push("/staff/my-webinars");
-        toast.success("Webinar created successfully");
-      } catch (error: any) {
-        toast.error(error?.response?.data ?? "Something went wrong");
-      } finally {
-        setLoading(false);
+    try {
+      if (values.images) {
+        setHasImage(true);
       }
-    });
+
+      const imageUrl = isArrayOfFile(values.images)
+        ? await startUpload(values.images).then((res) => {
+            const formattedImages = res?.map((image) => ({
+              id: image.key,
+              name: image.key.split("_")[1] ?? image.key,
+              url: image.url,
+            }));
+            return formattedImages?.[0]?.url
+              ? (formattedImages[0].url as string)
+              : null;
+          })
+        : null;
+
+      await axios.post("/api/webinar", {
+        ...values,
+        imageUrl,
+      });
+
+      form.reset();
+      setFiles(null);
+      setHasImage(false);
+      router.refresh();
+      router.push("/staff/my-webinars");
+      toast.success("Webinar created successfully");
+    } catch (error: any) {
+      toast.error(error?.response?.data ?? "Something went wrong");
+    }
   };
 
   return (
     <div className="bg-slate-100 min-h-screen">
       <PageLayout>
-        <div className="container pt-[107px]">
-          <div className="flex flex-col space-y-4 py-6">
+        <div className="container pt-[50px] md:pt-[107px] p-4 md:p-6">
+          <div className="flex flex-col space-y-4 py-4 md:py-6">
             <Heading
               title="Create Webinar"
               description="Create webinar session and invite your attendees"
@@ -138,7 +133,7 @@ const CreateWebinarPage = () => {
             <Separator />
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-2 gap-8">
+                <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-2 gap-8">
                   <FormField
                     control={form.control}
                     name="title"
@@ -164,7 +159,6 @@ const CreateWebinarPage = () => {
                         <FormLabel>Webinar session speaker</FormLabel>
                         <FormControl>
                           <Input
-                            className=" col-span-5"
                             disabled={loading}
                             placeholder="Speaker name"
                             {...field}
@@ -213,7 +207,7 @@ const CreateWebinarPage = () => {
                           name="images"
                           setFiles={setFiles}
                           isUploading={isUploading}
-                          isPending={isPending}
+                          isPending={loading}
                           setHasImage={setHasImage}
                         />
                       </FormControl>
@@ -225,14 +219,19 @@ const CreateWebinarPage = () => {
                     </FormItem>
                   </div>
 
-                  <div className="w-full md:aspect-[2.4/1] bg-cover relative group">
-                    {preview && (
+                  <div
+                    className={cn(
+                      "w-full aspect-video bg-cover relative group hidden md:block",
+                      preview && "block"
+                    )}
+                  >
+                    {preview ? (
                       <div className="col-span-2">
                         <div className="flex flex-col space-y-2">
                           <div className=" md:aspect-[2.4/1] bg-cover mt-8">
                             {preview}
                           </div>
-                          <div className="absolute top-4 right-4 opacity-0 transition-all group-hover:opacity-100">
+                          <div className="absolute top-2 right-4 opacity-0 transition-all group-hover:opacity-100">
                             <Button
                               variant="secondary"
                               size="icon"
@@ -247,7 +246,7 @@ const CreateWebinarPage = () => {
                           </div>
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
 
                   <FormField

@@ -62,7 +62,7 @@ const ManageWebinar = async ({ params }: ManageWebinarProps) => {
   return (
     <div className="bg-slate-100 min-h-screen">
       <PageLayout>
-        <div className="container mx-auto pt-[57px] md:pt-[107px]">
+        <div className="p-4 sm:p-6 mx-auto pt-[57px] md:pt-[107px]">
           <div className="flex flex-col space-y-4 py-6">
             <WebinarHeader
               webinarId={params.webinarId}

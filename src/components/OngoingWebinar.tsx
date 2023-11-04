@@ -4,10 +4,11 @@ import { Webinar } from "@/types/types";
 import WebinarItemHomePage from "./WebinarItemHomePage";
 import { Participant } from "@prisma/client";
 import Image from "next/image";
-import WebinarEventItem from "./WebinarEventItem";
+import OngoingWebinarEventItem from "./OngoingWebinarEventItem";
 
 type WebinarWithParticipants = Webinar & {
   participants: Participant[];
+  author: { name: string };
 };
 
 interface OngoingWebinarProps {
@@ -33,7 +34,7 @@ const OngoingWebinar = ({ data, userId }: OngoingWebinarProps) => {
       )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {data?.map((item) => (
-          <WebinarEventItem key={item.id} data={item} userId={userId} />
+          <OngoingWebinarEventItem key={item.id} data={item} userId={userId} />
         ))}
       </div>
     </div>

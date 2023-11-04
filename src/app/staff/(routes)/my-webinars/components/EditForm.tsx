@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -69,7 +69,7 @@ const EditWebinarForm = ({ data }: EditWebinarFormProps) => {
         src={data?.imageUrl}
         alt="preview"
         fill
-        loading="lazy"
+        sizes="100%"
         className="md:aspect-[2.4/1] object-cover object-center"
       />
     ) : (

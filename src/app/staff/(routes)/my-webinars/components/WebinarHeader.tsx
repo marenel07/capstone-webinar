@@ -56,7 +56,11 @@ const WebinarHeader = ({
         <StatusSwitcher status={status} webinarId={webinarId} />
         <DepartmentSwitcher department={department} webinarId={webinarId} />
         <ActionTooltip label="Delete webinar">
-          <Button onClick={onDelete} variant="destructive" disabled={loading}>
+          <Button
+            onClick={() => setOpen(true)}
+            variant="destructive"
+            disabled={loading}
+          >
             <Trash size={20} />
           </Button>
         </ActionTooltip>

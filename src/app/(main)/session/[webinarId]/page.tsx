@@ -37,6 +37,8 @@ const RoomPage = async ({ params }: RoomPageProps) => {
     (participant) => participant.userId === user.id
   );
 
+  const isHost = webinar.authorId === user.id;
+
   if (!isParticipant) {
     return redirect("/");
   }
@@ -46,7 +48,8 @@ const RoomPage = async ({ params }: RoomPageProps) => {
       chatId={params.webinarId}
       video={true}
       audio={true}
-      name={user?.name}
+      name={user.name}
+      isHost={isHost}
     />
   );
 };

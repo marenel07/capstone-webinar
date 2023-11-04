@@ -15,6 +15,7 @@ const getPostedWebinars = cache(async () => {
       },
       include: {
         participants: true,
+        author: true,
       },
     });
 

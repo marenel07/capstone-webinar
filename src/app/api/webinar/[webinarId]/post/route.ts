@@ -1,6 +1,7 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(
   req: Request,
@@ -33,6 +34,8 @@ export async function PATCH(
         departmentPost: department,
       },
     });
+
+    revalidatePath("/");
 
     return NextResponse.json(webinar);
   } catch (error) {

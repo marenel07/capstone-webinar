@@ -8,7 +8,6 @@ import bcrypt from "bcrypt";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const path = "/admin/users";
     const user = await getCurrentUser();
 
     const { data } = body;
@@ -40,7 +39,7 @@ export async function POST(req: Request) {
     //   emailType: 'VERIFY',
     //   userId: user.id,
     // });
-    revalidatePath(path);
+    revalidatePath("/admin/users");
 
     return NextResponse.json(response);
   } catch (error: any) {

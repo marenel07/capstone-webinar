@@ -1,9 +1,9 @@
-import { AccessToken } from 'livekit-server-sdk';
-import { NextRequest, NextResponse } from 'next/server';
+import { AccessToken } from "livekit-server-sdk";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const room = req.nextUrl.searchParams.get('room');
-  const username = req.nextUrl.searchParams.get('username');
+  const room = req.nextUrl.searchParams.get("room");
+  const username = req.nextUrl.searchParams.get("username");
   if (!room) {
     return NextResponse.json(
       { error: 'Missing "room" query parameter' },
@@ -22,12 +22,15 @@ export async function GET(req: NextRequest) {
 
   if (!apiKey || !apiSecret || !wsUrl) {
     return NextResponse.json(
-      { error: 'Server misconfigured' },
+      { error: "Server misconfigured" },
       { status: 500 }
     );
   }
 
-  const at = new AccessToken(apiKey, apiSecret, { identity: username });
+  const at = new AccessToken(apiKey, apiSecret, {
+    identity: username,
+    name: username,
+  });
 
   at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true });
 

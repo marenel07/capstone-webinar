@@ -1,6 +1,6 @@
-import { cache } from 'react';
-import getCurrentUser from './getCurrentUser';
-import prisma from '@/lib/prismadb';
+import { cache } from "react";
+import getCurrentUser from "./getCurrentUser";
+import prisma from "@/lib/prismadb";
 
 const getWebinars = cache(async () => {
   try {
@@ -19,6 +19,7 @@ const getWebinars = cache(async () => {
             user: true,
           },
         },
+        author: true,
       },
     });
 
@@ -28,7 +29,7 @@ const getWebinars = cache(async () => {
 
     return webinars;
   } catch (error) {
-    console.log('WEBINARS ERROR: ', error);
+    console.log("WEBINARS ERROR: ", error);
     return null;
   }
 });

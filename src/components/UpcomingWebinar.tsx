@@ -8,6 +8,7 @@ import WebinarEventItem from "./WebinarEventItem";
 
 type WebinarWithParticipants = Webinar & {
   participants: Participant[];
+  author: { name: string };
 };
 
 interface UpcomingWebinarProps {

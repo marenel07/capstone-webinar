@@ -1,4 +1,6 @@
+import Heading from "@/components/Heading";
 import WebinarItem from "@/components/WebinarItem";
+import WebinarItemSkeleton from "@/components/skeletons/WebinarItem";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Webinar } from "@/types/types";
@@ -7,26 +9,34 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+type WebinarWithAuthor = Webinar & {
+  author: { name: string };
+};
+
 interface WebinarListsProps {
-  initialData: Webinar[] | null | undefined;
+  initialData: WebinarWithAuthor[] | null | undefined;
 }
 
 const WebinarLists = ({ initialData }: WebinarListsProps) => {
   return (
-    <div className="p-6 flex flex-col gap-6">
-      <div className="flex items-center justify-end">
+    <div className="p-4 sm:p-6 flex flex-col gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+        <Heading
+          title="My webinars"
+          description="Here you can see all your webinars."
+        />
         <Link
           href="/staff/my-webinars/create"
           className={cn(
             buttonVariants({ variant: "outline" }),
-            "hover:bg-neutral-50"
+            "hover:bg-neutral-50 w-fit"
           )}
         >
           <PlusCircle size={20} className="mr-2" />{" "}
           <span>Create new webinar</span>
         </Link>
       </div>
-      <Suspense fallback={<div>Loading... </div>}>
+      <Suspense fallback={<WebinarItemSkeleton />}>
         {initialData?.length === 0 && (
           <div className="flex flex-col items-center justify-center h-[calc(100vh-250px)]">
             <Image
@@ -41,7 +51,7 @@ const WebinarLists = ({ initialData }: WebinarListsProps) => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {initialData?.map((item) => (
             <WebinarItem key={item.id} data={item} />
           ))}

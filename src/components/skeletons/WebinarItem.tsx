@@ -11,7 +11,7 @@ import { Skeleton } from "../ui/skeleton";
 const WebinarItemSkeleton = () => {
   return (
     <Card className={cn("flex flex-col min-h-fit overflow-hidden")}>
-      <Skeleton className="w-[800px] h-[350px]" />
+      <Skeleton className="w-[800px] h-[290px]" />
       <div>
         <CardHeader>
           <CardTitle>

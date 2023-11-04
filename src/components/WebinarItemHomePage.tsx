@@ -20,7 +20,10 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Participant } from "@prisma/client";
 
-type WebinarWithParticipants = Webinar & { participants: Participant[] };
+type WebinarWithParticipants = Webinar & {
+  participants: Participant[];
+  author: { name: string };
+};
 interface WebinarItemHomePageProps {
   data: WebinarWithParticipants;
   className?: string;
@@ -89,6 +92,12 @@ const WebinarItemHomePage: React.FC<WebinarItemHomePageProps> = ({
             <div className="flex items-center gap-2">
               <span className="text-sm text-neutral-700">Speaker :</span>
               <span className="text-sm text-neutral-500">{data.speaker}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-neutral-700">Staff :</span>
+              <span className="text-sm text-neutral-500">
+                {data.author.name}
+              </span>
             </div>
           </div>
         </CardContent>

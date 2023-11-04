@@ -4,7 +4,10 @@ import WebinarItemHomePage from "./WebinarItemHomePage";
 import { Participant } from "@prisma/client";
 import WebinarItemSkeleton from "./skeletons/WebinarItem";
 
-type WebinarWithParticipants = Webinar & { participants: Participant[] };
+type WebinarWithParticipants = Webinar & {
+  participants: Participant[];
+  author: { name: string };
+};
 
 interface WebinarListsProps {
   initialData: WebinarWithParticipants[] | null | undefined;

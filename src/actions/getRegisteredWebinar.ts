@@ -22,6 +22,7 @@ const getRegisteredWebinar = cache(async () => {
       },
       include: {
         participants: true,
+        author: true,
       },
     });
 

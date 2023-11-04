@@ -30,7 +30,7 @@ interface WebinarItemHomePageProps {
   userId: string | undefined;
 }
 
-const WebinarEventItem: React.FC<WebinarItemHomePageProps> = ({
+const OngoingWebinarEventItem: React.FC<WebinarItemHomePageProps> = ({
   data,
   className,
   userId,
@@ -102,42 +102,15 @@ const WebinarEventItem: React.FC<WebinarItemHomePageProps> = ({
         <CardFooter>
           <div className="flex gap-8 group">
             {isRegistered && (
-              <Button className={cn(isOwner && "hidden")}>Registered</Button>
-            )}
-
-            {isOwner ? (
               <Button
-                onClick={() =>
-                  router.push(`/staff/my-webinars/${data.id}/manage`)
-                }
-                className="flex items-center"
+                onClick={() => router.push(`/session/${data?.id}`)}
+                className={cn("flex items-center", isOwner && "hidden")}
               >
-                <span>Manage Webinar </span>
+                <span>Join Session</span>
                 <MoveRight
                   size={20}
                   className="lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out"
                 />
-              </Button>
-            ) : (
-              <Button
-                onClick={onRegister}
-                className={cn("flex items-center", isRegistered && "hidden")}
-                disabled={loading}
-              >
-                {loading ? (
-                  <span className="flex items-center">
-                    <Loader2 size={20} className="mr-2 animate-spin" />{" "}
-                    Registering...
-                  </span>
-                ) : (
-                  <>
-                    <span>Register Webinar </span>
-                    <MoveRight
-                      size={20}
-                      className="lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out"
-                    />
-                  </>
-                )}
               </Button>
             )}
           </div>
@@ -147,4 +120,4 @@ const WebinarEventItem: React.FC<WebinarItemHomePageProps> = ({
   );
 };
 
-export default WebinarEventItem;
+export default OngoingWebinarEventItem;
