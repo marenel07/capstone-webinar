@@ -1,6 +1,5 @@
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import localFont from "next/font/local";
-import { aspire, telegraf } from "@/components/font/font";
+import fontkit from "@pdf-lib/fontkit";
 
 interface CertificateGenerator {
   userName: string | undefined;
@@ -16,18 +15,23 @@ export const certificateGenerator = async ({
   speaker,
 }: CertificateGenerator) => {
   try {
-    const url = "/pdf/WebinarCertification.pdf";
+    const url = "/images/certification.pdf";
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    pdfDoc.registerFontkit(fontkit);
 
     const pages = pdfDoc.getPages();
     const firstPage = pages[0];
 
-    // const fontBytesName = fs.readFileSync("/font/AspireDemibold-YaaO.ttf");
-    // const fontBytes = fs.readFileSync("/font/PPTelegraf-Regular.otf");
-    const nameFont = await pdfDoc.embedFont(aspire);
-    const font = await pdfDoc.embedFont(telegraf);
+    const fontBytesName = await fetch("/font/aspire.ttf").then((res) =>
+      res.arrayBuffer()
+    );
+    const fontBytes = await fetch("/font/telegraf.otf").then((res) =>
+      res.arrayBuffer()
+    );
+    const nameFont = await pdfDoc.embedFont(fontBytesName);
+    const font = await pdfDoc.embedFont(fontBytes);
 
     const nameWidth = nameFont.widthOfTextAtSize(userName as string, 50);
     const titleWidth = font.widthOfTextAtSize(title, 16);

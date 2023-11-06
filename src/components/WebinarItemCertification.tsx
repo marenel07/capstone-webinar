@@ -26,23 +26,20 @@ type WebinarWithParticipants = Webinar & {
   participants: Participant[];
   author: { name: string };
 };
-interface WebinarItemHomePageProps {
+interface WebinarItemCertificationProps {
   data: WebinarWithParticipants | undefined;
   className?: string;
-  userId?: string | undefined;
-  userName?: string | undefined;
+  userId: string | undefined;
+  userName: string | undefined;
 }
 
-const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
+const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
   data,
   className,
   userId,
   userName,
 }) => {
   const router = useRouter();
-
-  const isStarted = data?.status === WEBINAR_STATUS.STARTED;
-  const isUpcoming = data?.status === WEBINAR_STATUS.UPCOMING;
 
   const userRegistered = data?.participants.find(
     (user) => user.userId === userId
@@ -53,8 +50,6 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
 
   const { useUploadThing } = generateReactHelpers<OurFileRouter>();
   const { isUploading, startUpload } = useUploadThing("pdfUploader");
-
-  console.log(userName);
 
   const onSubmit = async () => {
     try {
@@ -77,7 +72,6 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
         : null;
 
       await axios.patch(`/api/webinar/${data?.id}/evaluation`, {
-        userId,
         certificate,
       });
       toast.success("Evaluated Successfully");
@@ -154,24 +148,14 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
               </PopupButton>
             )}
 
-            {isStarted && (
-              <Button
-                disabled={!isStarted}
-                onClick={() => router.push(`/session/${data?.id}`)}
-                className="flex items-center"
-              >
-                <span>Join Session</span>
-                <MoveRight
-                  size={20}
-                  className="lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out"
-                />
+            {isEvaluated ? (
+              <Button className="bg-neutral-500 text-white">
+                Download Certificate
               </Button>
-            )}
-
-            {isUpcoming && (
-              <p className="text-sm bg-amber-200 p-2 rounded-full">
-                🎉 Connect, learn, and grow at our upcoming gathering!
-              </p>
+            ) : (
+              <Button className="bg-neutral-500 text-white">
+                Certificate not available
+              </Button>
             )}
           </div>
         </CardFooter>
@@ -180,4 +164,4 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
   );
 };
 
-export default WebinarItemRegistered;
+export default WebinarItemCertification;

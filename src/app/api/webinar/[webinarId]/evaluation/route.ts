@@ -11,15 +11,12 @@ export async function PATCH(
 ) {
   try {
     const body = await req.json();
-    const { userId, certificate } = body;
+    const { certificate } = body;
 
     if (!params.webinarId) {
       return new NextResponse("Webinar id is required", { status: 400 });
     }
 
-    if (!userId) {
-      return new NextResponse("All fields are required", { status: 400 });
-    }
     if (!certificate) {
       return new NextResponse("All fields are required", { status: 400 });
     }
@@ -54,10 +51,10 @@ export async function PATCH(
         participants: {
           updateMany: {
             where: {
-              userId,
+              userId: user.id,
             },
             data: {
-              evaluated: false,
+              evaluated: true,
             },
           },
         },
@@ -72,7 +69,7 @@ export async function PATCH(
         participants: {
           updateMany: {
             where: {
-              userId,
+              userId: user.id,
               evaluated: true,
             },
             data: {
