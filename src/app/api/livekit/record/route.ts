@@ -21,8 +21,8 @@ export async function POST(req: Request) {
       fileType: EncodedFileType.MP4,
       filepath: `livekit/${chatId}.mp4`,
       s3: {
-        accessKey: process.env.AWS_ACCESS_KEY,
-        secret: process.env.AWS_ACCESS_SECRET,
+        accessKey: process.env.AWS_ACCESS_KEY_ID,
+        secret: process.env.AWS_ACCESS_SECRET_KEY,
         region: process.env.AWS_REGION,
         bucket: process.env.BUCKET,
       },
