@@ -62,8 +62,10 @@ const Topbar: React.FC<TopbarProps> = ({ session }) => {
             <div className="cursor-pointer">
               <DropdownMenu>
                 <DropdownMenuTrigger className="ring-0 visited:border-none visited:ring-transparent rounded-full flex items-center">
+                  <p className="sr-only">Avatar button</p>
                   <Avatar>
                     <AvatarImage
+                      alt="User avatar"
                       src={session?.user?.image ?? "/images/default.jpg"}
                     />
                     <AvatarFallback className="text-2xl">

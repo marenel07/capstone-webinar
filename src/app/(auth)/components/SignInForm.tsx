@@ -88,7 +88,7 @@ const SignInForm = () => {
         <div className="flex flex-col justify-center items-center text-base md:text-lg font-semibold">
           Sorsogon State University <span>Bulan Campus</span>
         </div>
-        <h3 className="text-xl text-maroon font-bold self-center">
+        <h3 className="text-xl text-maroon font-bold text-center">
           Webinar Management System
         </h3>
       </div>
