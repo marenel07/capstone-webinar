@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, HomeIcon, Video, Videotape } from "lucide-react";
+import { Award, HomeIcon, LayoutList, Video, Videotape } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 import Image from "next/image";
@@ -65,7 +65,7 @@ const UserMobileSidebar = () => {
                   <SidebarItem
                     active={active}
                     href="/user/registered-webinar"
-                    icon={Video}
+                    icon={LayoutList}
                     label="Registered Webinar"
                     activeLabel="registered-webinar"
                     onClose={onClose}

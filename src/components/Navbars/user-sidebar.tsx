@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
+import { useSidebarCollapse } from "@/hooks/useSidebarCollapse";
 import {
   Award,
   ChevronsLeft,
   ChevronsRight,
   HomeIcon,
+  LayoutList,
   MoreHorizontal,
   Video,
   Videotape,
-} from 'lucide-react';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import SidebarItem from './SidebarItem';
+} from "lucide-react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import SidebarItem from "./SidebarItem";
 
 const UserSidebar = () => {
   const pathname = usePathname();
-  const route = pathname.split('/')[2];
-  const activeRoute = route === undefined ? 'home' : route;
+  const route = pathname.split("/")[2];
+  const activeRoute = route === undefined ? "home" : route;
 
   const sidebar = useSidebarCollapse();
 
@@ -29,91 +30,91 @@ const UserSidebar = () => {
   }, [activeRoute]);
 
   return (
-    <div className='hidden lg:block bg-primary h-full fixed top-0 left-0 group z-50'>
+    <div className="hidden lg:block bg-primary h-full fixed top-0 left-0 group z-50">
       <div
         onClick={sidebar.toggleSidebarCollapse}
-        className='opacity-0 group-hover:opacity-100 absolute cursor-pointer transition-all bg-white z-20 -right-4 top-10 border p-1 rounded-full'
+        className="opacity-0 group-hover:opacity-100 absolute cursor-pointer transition-all bg-white z-20 -right-4 top-10 border p-1 rounded-full"
       >
         {sidebar.isSidebarCollapsed ? (
-          <ChevronsRight size={20} className='text-bgMain' />
+          <ChevronsRight size={20} className="text-bgMain" />
         ) : (
-          <ChevronsLeft size={20} className='text-bgMain' />
+          <ChevronsLeft size={20} className="text-bgMain" />
         )}
       </div>
       <div
         className={`w-full text-neutral-200 flex flex-col gap-12 p-3 ${
-          sidebar.isSidebarCollapsed && 'mt-[14px]'
+          sidebar.isSidebarCollapsed && "mt-[14px]"
         }`}
       >
-        <div className='flex flex-col gap-4 items-center justify-center'>
+        <div className="flex flex-col gap-4 items-center justify-center">
           <Image
-            src='/images/ssu-logo.png'
-            alt='logo'
+            src="/images/ssu-logo.png"
+            alt="logo"
             width={sidebar.isSidebarCollapsed ? 50 : 70}
             height={sidebar.isSidebarCollapsed ? 50 : 70}
           />
-          <h1 className='text-sm'>
+          <h1 className="text-sm">
             {sidebar.isSidebarCollapsed ? (
               <MoreHorizontal size={25} />
             ) : (
-              'Webinar Management System'
+              "Webinar Management System"
             )}
           </h1>
         </div>
 
-        <div className='flex flex-col gap-10'>
+        <div className="flex flex-col gap-10">
           <SidebarItem
             active={active}
-            href='/user'
+            href="/user"
             icon={HomeIcon}
-            label='Home'
-            activeLabel='home'
+            label="Home"
+            activeLabel="home"
           />
 
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-4">
             <div
               className={`w-full flex items-center ${
-                sidebar.isSidebarCollapsed && 'justify-center'
+                sidebar.isSidebarCollapsed && "justify-center"
               }`}
             >
-              <h1 className='uppercase text-sm text-neutral-500'>
+              <h1 className="uppercase text-sm text-neutral-500">
                 {sidebar.isSidebarCollapsed ? (
                   <MoreHorizontal size={21} />
                 ) : (
-                  'main menu'
+                  "main menu"
                 )}
               </h1>
             </div>
-            <ul className='flex flex-col gap-2'>
+            <ul className="flex flex-col gap-2">
               <SidebarItem
                 active={active}
-                href='/user/webinars'
+                href="/user/webinars"
                 icon={Video}
-                label='Webinars'
-                activeLabel='webinars'
+                label="Webinars"
+                activeLabel="webinars"
               />
               <SidebarItem
                 active={active}
-                href='/user/registered-webinar'
-                icon={Video}
-                label='Registered Webinar'
-                activeLabel='registered-webinar'
+                href="/user/registered-webinar"
+                icon={LayoutList}
+                label="Registered Webinar"
+                activeLabel="registered-webinar"
               />
 
               <SidebarItem
                 active={active}
-                href='/user/recordings'
+                href="/user/recordings"
                 icon={Videotape}
-                label='Recordings'
-                activeLabel='recordings'
+                label="Recordings"
+                activeLabel="recordings"
               />
 
               <SidebarItem
                 active={active}
-                href='/user/certificates'
+                href="/user/certificates"
                 icon={Award}
-                label='Certificates'
-                activeLabel='certificates'
+                label="Certificates"
+                activeLabel="certificates"
               />
             </ul>
           </div>
