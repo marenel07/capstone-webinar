@@ -5,8 +5,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 import WebinarItemCertification from "@/components/WebinarItemCertification";
 import prisma from "@/lib/prismadb";
 import { format } from "date-fns";
+import Image from "next/image";
 
-const CertificatePage = async () => {
+const RecordingsPage = async () => {
   const user = await getCurrentUser();
 
   const webinars = await prisma.webinar.findMany({
@@ -33,26 +34,23 @@ const CertificatePage = async () => {
     <div className="bg-slate-100 min-h-screen">
       <PageLayout>
         <div className="p-4 sm:p-6 mx-auto pt-[57px] md:pt-[107px]">
-          <div className="flex flex-col py-6 gap-y-6">
+          <div className="flex flex-col py-6 gap-y-6 min-h-full">
             <Heading
-              title="Certification"
-              description="List of your certified webinar"
+              title="Webinar Recordings"
+              description="List of your registered webinar recordigs"
             />
-            {formattedData.map((webinar) => {
-              return (
-                <div
-                  key={webinar.id}
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-                >
-                  <WebinarItemCertification
-                    key={webinar.id}
-                    data={webinar}
-                    userId={user?.id}
-                    userName={user?.name}
-                  />
-                </div>
-              );
-            })}
+            {/* No data found page */}
+            <div className="flex flex-col items-center justify-center mt-20">
+              <Image
+                src="/images/464.svg"
+                alt="No data found"
+                width={384}
+                height={384}
+              />
+              <p className="text-xl font-semibold text-gray-500">
+                No data found
+              </p>
+            </div>
           </div>
         </div>
       </PageLayout>
@@ -61,4 +59,4 @@ const CertificatePage = async () => {
   );
 };
 
-export default CertificatePage;
+export default RecordingsPage;
