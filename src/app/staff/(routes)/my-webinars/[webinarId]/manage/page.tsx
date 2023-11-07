@@ -58,6 +58,7 @@ const ManageWebinar = async ({ params }: ManageWebinarProps) => {
 
   const departmentPost = webinar?.departmentPost;
   const status = webinar?.status;
+  const isPosted = webinar?.isPosted;
 
   return (
     <div className="bg-slate-100 min-h-screen">
@@ -68,6 +69,7 @@ const ManageWebinar = async ({ params }: ManageWebinarProps) => {
               webinarId={params.webinarId}
               status={status}
               department={departmentPost}
+              isPosted={isPosted}
             />
 
             <Tabs defaultValue="participants" className="w-full">

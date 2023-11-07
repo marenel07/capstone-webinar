@@ -18,12 +18,14 @@ interface WebinarHeaderProps {
   webinarId: string;
   status: WEBINAR_STATUS | undefined;
   department: DEPARTMENT_POST | undefined;
+  isPosted: boolean | undefined;
 }
 
 const WebinarHeader = ({
   webinarId,
   status,
   department,
+  isPosted,
 }: WebinarHeaderProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -54,7 +56,11 @@ const WebinarHeader = ({
       <Heading title="Manage Webinar" description="Manage your webinar here." />
       <div className="flex gap-3">
         <StatusSwitcher status={status} webinarId={webinarId} />
-        <DepartmentSwitcher department={department} webinarId={webinarId} />
+        <DepartmentSwitcher
+          department={department}
+          webinarId={webinarId}
+          isPosted={isPosted}
+        />
         <ActionTooltip label="Delete webinar">
           <Button
             onClick={() => setOpen(true)}

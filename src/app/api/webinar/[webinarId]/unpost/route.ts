@@ -8,15 +8,8 @@ export async function PATCH(
   { params }: { params: { webinarId: string } }
 ) {
   try {
-    const body = await req.json();
-    const { department } = body;
-
     if (!params.webinarId) {
       return new NextResponse("Webinar id is required", { status: 400 });
-    }
-
-    if (!department) {
-      return new NextResponse("Department is required", { status: 400 });
     }
 
     const user = await getCurrentUser();
@@ -31,8 +24,7 @@ export async function PATCH(
         authorId: user.id,
       },
       data: {
-        departmentPost: department,
-        isPosted: true,
+        isPosted: false,
       },
     });
 
@@ -40,7 +32,7 @@ export async function PATCH(
 
     return NextResponse.json(webinar);
   } catch (error) {
-    console.log("[WWEBINAR_POST]", error);
+    console.log("[WEBINAR_UNPOST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

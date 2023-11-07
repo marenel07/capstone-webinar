@@ -31,12 +31,14 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 interface DepartmentSwitcherProps extends PopoverTriggerProps {
   department: DEPARTMENT_POST | undefined;
   webinarId: string;
+  isPosted: boolean | undefined;
 }
 
 export default function DepartmentSwitcher({
   className,
   department,
   webinarId,
+  isPosted,
 }: DepartmentSwitcherProps) {
   const router = useRouter();
 
@@ -44,16 +46,22 @@ export default function DepartmentSwitcher({
 
   const [open, setOpen] = useState(false);
 
-  const onStoreSelect = (department: DEPARTMENT_POST) => {
+  const departmentObj = {
+    ALL: "ALL",
+    ICT: "ICT",
+    BME: "BME",
+  };
+
+  const onStoreSelect = (department: string) => {
     setLoading(true);
     setOpen(false);
-    toast.promise(
-      axios.patch(`/api/webinar/${webinarId}/post`, { department }),
-      {
-        loading: `Posting to ${department}`,
+
+    if (department === DEPARTMENT_POST.UNPOST) {
+      toast.promise(axios.patch(`/api/webinar/${webinarId}/unpost`), {
+        loading: `Unposting`,
         success: () => {
           router.refresh();
-          return `Posted to ${department}`;
+          return `Unposted`;
         },
         error: (err) => {
           return toast.error(err.response.data ?? "Something went wrong");
@@ -61,9 +69,26 @@ export default function DepartmentSwitcher({
         finally: () => {
           setLoading(false);
         },
-      }
-    );
-    router.refresh();
+      });
+    } else {
+      toast.promise(
+        axios.patch(`/api/webinar/${webinarId}/post`, { department }),
+        {
+          loading: `Posting to ${department}`,
+          success: () => {
+            router.refresh();
+            return `Posted to ${department}`;
+          },
+          error: (err) => {
+            return toast.error(err.response.data ?? "Something went wrong");
+          },
+          finally: () => {
+            setLoading(false);
+          },
+        }
+      );
+      router.refresh();
+    }
   };
 
   return (
@@ -80,9 +105,9 @@ export default function DepartmentSwitcher({
           )}
           disabled={loading}
         >
-          {department === DEPARTMENT_POST.UNPOST ? (
-            "Unposted"
-          ) : (
+          {!isPosted && "Unposted"}
+
+          {isPosted && (
             <>
               {department ? (
                 <span className="mr-1 hidden md:block">Posted to</span>
@@ -93,6 +118,7 @@ export default function DepartmentSwitcher({
               </p>
             </>
           )}
+
           <ChevronsUpDown
             size={24}
             className="ml-auto h-4 w-4 shrink-0 opacity-50"
@@ -105,7 +131,19 @@ export default function DepartmentSwitcher({
             {/* <CommandInput placeholder="Search store..." />
             <CommandEmpty>No store found.</CommandEmpty> */}
             <CommandGroup heading="Departments">
-              {Object.values(DEPARTMENT_POST).map((item) => (
+              <CommandItem
+                onSelect={() => onStoreSelect("UNPOST")}
+                className="text-sm"
+              >
+                UNPOST
+                <Check
+                  className={cn(
+                    "ml-auto h-4 w-4",
+                    !isPosted ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              </CommandItem>
+              {Object.values(departmentObj).map((item) => (
                 <CommandItem
                   key={item}
                   onSelect={() => onStoreSelect(item)}
@@ -115,7 +153,9 @@ export default function DepartmentSwitcher({
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      department === item ? "opacity-100" : "opacity-0"
+                      isPosted && "opacity-100" && department === item
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>

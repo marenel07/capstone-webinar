@@ -13,6 +13,7 @@ const getPostedWebinars = cache(async () => {
       where: {
         departmentPost: "ALL",
         status: "UPCOMING",
+        isPosted: true,
       },
       include: {
         participants: true,

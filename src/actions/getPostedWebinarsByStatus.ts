@@ -29,7 +29,7 @@ const getPostedWebinarsByStatus = cache(async (status: WEBINAR_STATUS) => {
     } else {
       webinars = await prisma.webinar.findMany({
         where: {
-          departmentPost: currentUser?.department as DEPARTMENT_POST,
+          departmentPost: (currentUser?.department as DEPARTMENT_POST) || "ALL",
           status: status,
         },
         include: {
