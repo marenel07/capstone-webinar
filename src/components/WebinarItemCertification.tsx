@@ -23,7 +23,8 @@ import { certificateGenerator } from "@/lib/certificateGenerator";
 import { generateReactHelpers } from "@uploadthing/react/hooks";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import Link from "next/link";
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, Suspense, useEffect, useRef } from "react";
+import WebinarItemSkeleton from "./skeletons/WebinarItem";
 
 type WebinarWithParticipants = Webinar & {
   participants: Participant[];
@@ -116,70 +117,76 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
   };
 
   return (
-    <Card className={cn("flex flex-col min-h-fit overflow-hidden", className)}>
-      <div className="relative w-full aspect-video rounded-md overflow-hidden">
-        <Zoom>
-          <Image
-            alt={data?.title as string}
-            src={data?.imageUrl as string}
-            className="object-cover"
-            placeholder="blur"
-            blurDataURL={data?.imageUrl}
-            width={800}
-            height={350}
-          />
-        </Zoom>
-      </div>
+    <Suspense fallback={<WebinarItemSkeleton />}>
+      <Card
+        className={cn("flex flex-col min-h-fit overflow-hidden", className)}
+      >
+        <div className="relative w-full aspect-video rounded-md overflow-hidden">
+          <Zoom>
+            <Image
+              alt={data?.title as string}
+              src={data?.imageUrl as string}
+              className="object-cover"
+              placeholder="blur"
+              blurDataURL={data?.imageUrl}
+              width={800}
+              height={350}
+            />
+          </Zoom>
+        </div>
 
-      <div>
-        <CardHeader>
-          <CardTitle>
-            <span className="text-lg font-semibold">{data?.title}</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-start mt-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-500">When:</span>
-              <span className="text-sm text-neutral-700">
-                {data?.date} ({data?.time})
-              </span>
+        <div>
+          <CardHeader>
+            <CardTitle>
+              <span className="text-lg font-semibold">{data?.title}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-start mt-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-neutral-500">When:</span>
+                <span className="text-sm text-neutral-700">
+                  {data?.date} ({data?.time})
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-neutral-500">Speaker :</span>
+                <span className="text-sm text-neutral-700">
+                  {data?.speaker}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-neutral-500">Staff :</span>
+                <span className="text-sm text-neutral-700">
+                  {data?.author.name}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-500">Speaker :</span>
-              <span className="text-sm text-neutral-700">{data?.speaker}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-500">Staff :</span>
-              <span className="text-sm text-neutral-700">
-                {data?.author.name}
-              </span>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <div className="flex gap-8 group">
-            {!isEvaluated && isEnded && (
-              <PopupButton
-                id="LTbO0WqF"
-                className={cn(buttonVariants({ variant: "default" }))}
-                autoClose
-                onSubmit={onSubmit}
-              >
-                Evaluate webinar
-              </PopupButton>
-            )}
+          </CardContent>
+          <CardFooter>
+            <div className="flex gap-8 group">
+              {!isEvaluated && isEnded && (
+                <PopupButton
+                  id="LTbO0WqF"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                  autoClose
+                  onSubmit={onSubmit}
+                >
+                  Evaluate webinar
+                </PopupButton>
+              )}
 
-            {isEvaluated ? (
-              <Button ref={buttonRef}>
-                <Award size={16} className="mr-2 text-yellow-600" /> Download
-                Certificate
-              </Button>
-            ) : null}
-          </div>
-        </CardFooter>
-      </div>
-    </Card>
+              {isEvaluated ? (
+                <Button ref={buttonRef}>
+                  <Award size={16} className="mr-2 text-yellow-600" /> Download
+                  Certificate
+                </Button>
+              ) : null}
+            </div>
+          </CardFooter>
+        </div>
+      </Card>
+    </Suspense>
   );
 };
 
