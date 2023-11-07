@@ -19,6 +19,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
           departmentPost: {
             not: "UNPOST",
           },
+          status: "UPCOMING",
         },
         include: {
           participants: true,
@@ -29,6 +30,7 @@ const getPostedWebinarsByDepartment = cache(async () => {
       webinars = await prisma.webinar.findMany({
         where: {
           departmentPost: currentUser?.department as DEPARTMENT_POST,
+          status: "UPCOMING",
         },
         include: {
           participants: true,
