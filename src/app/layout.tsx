@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Toaster } from "sonner";
 import AuthProvider from "@/providers/AuthProvider";
@@ -22,6 +23,7 @@ export default function RootLayout({
           <Toaster richColors />
           <ModalProvider />
           {children}
+          <Analytics />
         </AuthProvider>
       </body>
     </html>
