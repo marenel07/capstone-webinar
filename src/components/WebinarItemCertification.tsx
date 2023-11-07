@@ -51,6 +51,7 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
   const certificateUrl = userRegistered?.certificateUrl;
   const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
+  // * convert file url to blob
   useEffect(() => {
     const downloadFile = () => {
       fetch(certificateUrl as string)
@@ -60,7 +61,6 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
           const a = document.createElement("a");
           a.style.display = "none";
           a.href = url;
-          // the filename you want
           a.download = `${userName}.pdf`;
           document.body.appendChild(a);
           a.click();
@@ -77,7 +77,7 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
     return () => {
       button?.removeEventListener("click", downloadFile);
     };
-  }, []);
+  }, [certificateUrl, userName]);
 
   const isEvaluated = userRegistered?.evaluated;
   const isEnded = data?.status === WEBINAR_STATUS.ENDED;
@@ -96,7 +96,7 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
       const certificate = file
         ? await startUpload(file).then((res) => {
             const formattedImages = res?.map((image) => ({
-              name: image.key.split("_")[1] ?? image.key,
+              name: userName as string,
               url: image.url,
             }));
             return formattedImages?.[0]?.url
