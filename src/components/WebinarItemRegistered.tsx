@@ -54,8 +54,6 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
   const { useUploadThing } = generateReactHelpers<OurFileRouter>();
   const { isUploading, startUpload } = useUploadThing("pdfUploader");
 
-  console.log(userName);
-
   const onSubmit = async () => {
     try {
       const file = await certificateGenerator({
@@ -135,8 +133,11 @@ const WebinarItemRegistered: React.FC<WebinarItemHomePageProps> = ({
         <CardFooter>
           <div className="flex gap-8 group">
             {isEvaluated && (
-              <Button className="">
-                Check here if your certificate is already available
+              <Button
+                className="text-sm"
+                onClick={() => router.push("/user/certificates")}
+              >
+                Check if certificate is ready
                 <MoveRight
                   size={20}
                   className="lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out"

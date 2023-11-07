@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -12,7 +13,7 @@ import Image from "next/image";
 import { Zoom } from "./ZoomImage";
 import { Webinar } from "@/types/types";
 import { Button, buttonVariants } from "./ui/button";
-import { MoveRight } from "lucide-react";
+import { Award, MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Participant, WEBINAR_STATUS } from "@prisma/client";
 import { PopupButton } from "@typeform/embed-react";
@@ -21,6 +22,8 @@ import { toast } from "sonner";
 import { certificateGenerator } from "@/lib/certificateGenerator";
 import { generateReactHelpers } from "@uploadthing/react/hooks";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
+import Link from "next/link";
+import { MutableRefObject, useEffect, useRef } from "react";
 
 type WebinarWithParticipants = Webinar & {
   participants: Participant[];
@@ -44,6 +47,37 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
   const userRegistered = data?.participants.find(
     (user) => user.userId === userId
   );
+
+  const certificateUrl = userRegistered?.certificateUrl;
+  const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
+
+  useEffect(() => {
+    const downloadFile = () => {
+      fetch(certificateUrl as string)
+        .then((resp) => resp.blob())
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          // the filename you want
+          a.download = `${userName}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          toast.success("Downloaded Successfully");
+        })
+        .catch(() => toast.error("Something weng wrong"));
+    };
+
+    const button = buttonRef.current;
+    button?.addEventListener("click", downloadFile);
+
+    // Clean up function
+    return () => {
+      button?.removeEventListener("click", downloadFile);
+    };
+  }, []);
 
   const isEvaluated = userRegistered?.evaluated;
   const isEnded = data?.status === WEBINAR_STATUS.ENDED;
@@ -103,10 +137,7 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
             <span className="text-lg font-semibold">{data?.title}</span>
           </CardTitle>
         </CardHeader>
-
         <CardContent>
-          <p className="text-sm text-neutral-500">{data?.description}</p>
-
           <div className="flex flex-col items-start mt-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-neutral-500">When:</span>
@@ -128,15 +159,6 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
         </CardContent>
         <CardFooter>
           <div className="flex gap-8 group">
-            {isEvaluated && (
-              <Button className="">
-                Check here if your certificate is already available
-                <MoveRight
-                  size={20}
-                  className="lg:block ml-1 group-hover:translate-x-2 repeat-infinite transition-transform duration-300 ease-in-out"
-                />
-              </Button>
-            )}
             {!isEvaluated && isEnded && (
               <PopupButton
                 id="LTbO0WqF"
@@ -149,14 +171,11 @@ const WebinarItemCertification: React.FC<WebinarItemCertificationProps> = ({
             )}
 
             {isEvaluated ? (
-              <Button className="bg-neutral-500 text-white">
-                Download Certificate
+              <Button ref={buttonRef}>
+                <Award size={16} className="mr-2 text-yellow-600" /> Download
+                Certificate
               </Button>
-            ) : (
-              <Button className="bg-neutral-500 text-white">
-                Certificate not available
-              </Button>
-            )}
+            ) : null}
           </div>
         </CardFooter>
       </div>

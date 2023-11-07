@@ -43,7 +43,7 @@ const CertificatePage = async () => {
               return (
                 <div
                   key={webinar.id}
-                  className="grid grid-cols-1 md:grid-cols-2"
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
                 >
                   <WebinarItemCertification
                     key={webinar.id}
@@ -51,7 +51,6 @@ const CertificatePage = async () => {
                     userId={user?.id}
                     userName={user?.name}
                   />
-                  ;
                 </div>
               );
             })}
