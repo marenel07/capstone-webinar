@@ -95,7 +95,7 @@ export const MediaRoom = ({
       connectOptions={{ autoSubscribe: true }}
       video={video}
       audio={audio}
-      style={{ height: "100dvh" }}
+      style={{ height: "100vh" }}
       onDisconnected={() => router.back()}
     >
       <ParticipantNames open={open} onClose={() => setOpen(false)} />
@@ -125,7 +125,11 @@ export const MediaRoom = ({
 
       <VideoConference
         chatMessageFormatter={formatChatMessageLinks}
-        style={{ height: "calc(100vh - 40px)" }}
+        style={{
+          height: "calc(100vh - 3rem)",
+          width: "100%",
+          overflow: "hidden",
+        }}
       />
     </LiveKitRoom>
   );
