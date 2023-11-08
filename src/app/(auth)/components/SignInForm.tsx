@@ -82,7 +82,13 @@ const SignInForm = () => {
   return (
     <div className="bg-white w-full relative p-4 md:p-6 lg:p-8 max-w-md rounded-3xl">
       <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 md:hidden">
-        <Image src={"/images/ssu-logo.png"} width={100} height={100} alt="" />
+        <Image
+          src={"/images/ssu-logo.png"}
+          width={100}
+          height={100}
+          alt="SorSU-BC"
+          loading="eager"
+        />
       </div>
       <div className="flex flex-col mt-12 md:mt-0">
         <div className="flex flex-col justify-center items-center text-base md:text-lg font-semibold">

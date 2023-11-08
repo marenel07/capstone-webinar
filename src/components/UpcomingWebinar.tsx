@@ -24,6 +24,7 @@ const UpcomingWebinar = ({ data, userId }: UpcomingWebinarProps) => {
           <Image
             src="/images/464.svg"
             alt="No data illustration"
+            loading="eager"
             width={400}
             height={200}
           />
