@@ -7,7 +7,7 @@ import AuthProvider from "@/providers/AuthProvider";
 import ModalProvider from "@/providers/ModalProvider";
 
 export const metadata: Metadata = {
-  title: "SorSU-BC Webinar Mangaement System",
+  title: "SorSU-BC Webinar Management System",
   description: "A capstone project for SorSU-BC",
 };
 
