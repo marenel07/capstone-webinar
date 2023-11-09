@@ -33,7 +33,7 @@ const RecordingsPage = async () => {
           <div className="flex flex-col py-6 gap-y-6 min-h-full">
             <Heading
               title="Webinar Recordings"
-              description="List of your registered webinar recordigs"
+              description="List of webinar recordings"
             />
             {/* No data found page */}
             {formattedData?.length === 0 && (
