@@ -14,11 +14,6 @@ const RecordingsPage = async () => {
   const webinars = await prisma.webinar.findMany({
     where: {
       status: "ENDED",
-      participants: {
-        some: {
-          userId: user?.id,
-        },
-      },
     },
     include: {
       participants: true,
