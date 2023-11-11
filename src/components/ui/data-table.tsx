@@ -23,16 +23,17 @@ import {
 
 import { Button } from "./button";
 import { Input } from "./input";
-import { useState } from "react";
-import { PlusCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { Download, PlusCircle } from "lucide-react";
 import { DataTableViewOptions } from "./data-table-view-options";
+import Papa from "papaparse";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
   isFilter?: boolean;
+  isDownloadCsv?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,11 +41,46 @@ export function DataTable<TData, TValue>({
   data,
   searchKey,
   isFilter,
+  isDownloadCsv,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const router = useRouter();
+  const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
+
+  //remove id and role from data
+  const newData = data.map((item: any) => {
+    const { id, role, ...rest } = item;
+    return rest;
+  });
+
+  // * convert file url to blob
+  useEffect(() => {
+    const dataToCsv = Papa.unparse(newData);
+
+    const exportData = (data: string, fileName: string, type: string) => {
+      // Create a link and download the file
+      const blob = new Blob([data], { type });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    };
+
+    const downloadFile = () => {
+      exportData(dataToCsv, "data.csv", "text/csv");
+    };
+
+    const button = buttonRef.current;
+    button?.addEventListener("click", downloadFile);
+
+    // Clean up function
+    return () => {
+      button?.removeEventListener("click", downloadFile);
+    };
+  }, [newData]);
 
   const table = useReactTable({
     data,
@@ -73,6 +109,12 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         {isFilter ? <DataTableViewOptions table={table} /> : null}
+        {isDownloadCsv ? (
+          <Button variant="outline" size="sm" ref={buttonRef}>
+            <Download className="mr-2" size={18} />
+            Download CSV
+          </Button>
+        ) : null}
       </div>
       <div className="rounded-md border">
         <Table>
